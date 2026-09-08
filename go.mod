@@ -5,7 +5,7 @@ go 1.25
 require (
 	entgo.io/ent v0.14.6
 	github.com/google/uuid v1.6.0
-	github.com/mattn/go-sqlite3 v1.14.49
+	github.com/mattn/go-sqlite3 v1.14.52
 	github.com/santhosh-tekuri/jsonschema/v6 v6.0.3
 )
 
