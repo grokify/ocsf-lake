@@ -23,7 +23,7 @@
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
     
     
       
@@ -31,7 +31,7 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
       
         
         <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
@@ -1809,11 +1809,11 @@
 <h1 id="lake-api">Lake API<a class="headerlink" href="#lake-api" title="Permanent link">&para;</a></h1>
 <p>The <code>Lake</code> type is the main facade for storing and querying OCSF events.</p>
 <h2 id="package">Package<a class="headerlink" href="#package" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">import</span><span class="w"> </span><span class="s">"github.com/grokify/ocsf-lake/pkg/lake"</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">import</span><span class="w"> </span><span class="s">&quot;github.com/grokify/ocsf-lake/pkg/lake&quot;</span>
 </code></pre></div>
 <h2 id="creating-a-lake">Creating a Lake<a class="headerlink" href="#creating-a-lake" title="Permanent link">&para;</a></h2>
 <h3 id="new">New<a class="headerlink" href="#new" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kd">func</span><span class="w"> </span><span class="nx">New</span><span class="p">(</span><span class="nx">ctx</span><span class="w"> </span><span class="nx">context</span><span class="p">.</span><span class="nx">Context</span><span class="p">,</span><span class="w"> </span><span class="nx">opts</span><span class="w"> </span><span class="p">...</span><span class="nx">Option</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="nx">Lake</span><span class="p">,</span><span class="w"> </span><span class="kt">error</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kd">func</span><span class="w"> </span><span class="nx">New</span><span class="p">(</span><span class="nx">ctx</span><span class="w"> </span><span class="nx">context</span><span class="p">.</span><span class="nx">Context</span><span class="p">,</span><span class="w"> </span><span class="nx">opts</span><span class="w"> </span><span class="o">...</span><span class="nx">Option</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="nx">Lake</span><span class="p">,</span><span class="w"> </span><span class="kt">error</span><span class="p">)</span>
 </code></pre></div>
 <p>Creates a new Lake with the given options.</p>
 <p><strong>Example:</strong></p>
@@ -1895,16 +1895,16 @@ persist <code>Lake.ChainTail()</code> and pass it back as <code>InitialChainTail
 chain across restarts.</p>
 <h2 id="methods">Methods<a class="headerlink" href="#methods" title="Permanent link">&para;</a></h2>
 <h3 id="ingest">Ingest<a class="headerlink" href="#ingest" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="kd">func</span><span class="w"> </span><span class="p">(</span><span class="nx">l</span><span class="w"> </span><span class="o">*</span><span class="nx">Lake</span><span class="p">)</span><span class="w"> </span><span class="nx">Ingest</span><span class="p">(</span><span class="nx">ctx</span><span class="w"> </span><span class="nx">context</span><span class="p">.</span><span class="nx">Context</span><span class="p">,</span><span class="w"> </span><span class="nx">events</span><span class="w"> </span><span class="p">...</span><span class="nx">json</span><span class="p">.</span><span class="nx">RawMessage</span><span class="p">)</span><span class="w"> </span><span class="kt">error</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="kd">func</span><span class="w"> </span><span class="p">(</span><span class="nx">l</span><span class="w"> </span><span class="o">*</span><span class="nx">Lake</span><span class="p">)</span><span class="w"> </span><span class="nx">Ingest</span><span class="p">(</span><span class="nx">ctx</span><span class="w"> </span><span class="nx">context</span><span class="p">.</span><span class="nx">Context</span><span class="p">,</span><span class="w"> </span><span class="nx">events</span><span class="w"> </span><span class="o">...</span><span class="nx">json</span><span class="p">.</span><span class="nx">RawMessage</span><span class="p">)</span><span class="w"> </span><span class="kt">error</span>
 </code></pre></div>
 <p>Validates and stores one or more OCSF events.</p>
 <p><strong>Example:</strong></p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="nx">event</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">json</span><span class="p">.</span><span class="nx">RawMessage</span><span class="p">(</span><span class="s">`{</span>
-<a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a><span class="s">    "class_uid": 3002,</span>
-<a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a><span class="s">    "category_uid": 3,</span>
-<a id="__codelineno-17-4" name="__codelineno-17-4" href="#__codelineno-17-4"></a><span class="s">    "activity_id": 1,</span>
-<a id="__codelineno-17-5" name="__codelineno-17-5" href="#__codelineno-17-5"></a><span class="s">    "type_uid": 300201,</span>
-<a id="__codelineno-17-6" name="__codelineno-17-6" href="#__codelineno-17-6"></a><span class="s">    "time": 1704067200000</span>
+<a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a><span class="s">    &quot;class_uid&quot;: 3002,</span>
+<a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a><span class="s">    &quot;category_uid&quot;: 3,</span>
+<a id="__codelineno-17-4" name="__codelineno-17-4" href="#__codelineno-17-4"></a><span class="s">    &quot;activity_id&quot;: 1,</span>
+<a id="__codelineno-17-5" name="__codelineno-17-5" href="#__codelineno-17-5"></a><span class="s">    &quot;type_uid&quot;: 300201,</span>
+<a id="__codelineno-17-6" name="__codelineno-17-6" href="#__codelineno-17-6"></a><span class="s">    &quot;time&quot;: 1704067200000</span>
 <a id="__codelineno-17-7" name="__codelineno-17-7" href="#__codelineno-17-7"></a><span class="s">}`</span><span class="p">)</span>
 <a id="__codelineno-17-8" name="__codelineno-17-8" href="#__codelineno-17-8"></a>
 <a id="__codelineno-17-9" name="__codelineno-17-9" href="#__codelineno-17-9"></a><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">l</span><span class="p">.</span><span class="nx">Ingest</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span><span class="w"> </span><span class="nx">event</span><span class="p">)</span>
@@ -1914,7 +1914,7 @@ chain across restarts.</p>
 </code></pre></div>
 <p>Ingests an event with a specific ID (instead of auto-generating one).</p>
 <h3 id="ingesttyped">IngestTyped<a class="headerlink" href="#ingesttyped" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="kd">func</span><span class="w"> </span><span class="p">(</span><span class="nx">l</span><span class="w"> </span><span class="o">*</span><span class="nx">Lake</span><span class="p">)</span><span class="w"> </span><span class="nx">IngestTyped</span><span class="p">(</span><span class="nx">ctx</span><span class="w"> </span><span class="nx">context</span><span class="p">.</span><span class="nx">Context</span><span class="p">,</span><span class="w"> </span><span class="nx">events</span><span class="w"> </span><span class="p">...</span><span class="kt">any</span><span class="p">)</span><span class="w"> </span><span class="kt">error</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="kd">func</span><span class="w"> </span><span class="p">(</span><span class="nx">l</span><span class="w"> </span><span class="o">*</span><span class="nx">Lake</span><span class="p">)</span><span class="w"> </span><span class="nx">IngestTyped</span><span class="p">(</span><span class="nx">ctx</span><span class="w"> </span><span class="nx">context</span><span class="p">.</span><span class="nx">Context</span><span class="p">,</span><span class="w"> </span><span class="nx">events</span><span class="w"> </span><span class="o">...</span><span class="kt">any</span><span class="p">)</span><span class="w"> </span><span class="kt">error</span>
 </code></pre></div>
 <p>Ingests typed events, such as the generated structs from
 <code>github.com/grokify/ocsf-schema-go/ocsf/events</code> (e.g. <code>events.Authentication</code>),
@@ -1977,8 +1977,8 @@ through the same validation and indexing pipeline as <code>Ingest</code>.</p>
 to continue the chain across restarts.</p>
 <h2 id="errors">Errors<a class="headerlink" href="#errors" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-34-1" name="__codelineno-34-1" href="#__codelineno-34-1"></a><span class="kd">var</span><span class="w"> </span><span class="p">(</span>
-<a id="__codelineno-34-2" name="__codelineno-34-2" href="#__codelineno-34-2"></a><span class="w">    </span><span class="nx">ErrInvalidBackend</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">errors</span><span class="p">.</span><span class="nx">New</span><span class="p">(</span><span class="s">"invalid storage backend configuration"</span><span class="p">)</span>
-<a id="__codelineno-34-3" name="__codelineno-34-3" href="#__codelineno-34-3"></a><span class="w">    </span><span class="nx">ErrClosed</span><span class="w">         </span><span class="o">=</span><span class="w"> </span><span class="nx">errors</span><span class="p">.</span><span class="nx">New</span><span class="p">(</span><span class="s">"lake is closed"</span><span class="p">)</span>
+<a id="__codelineno-34-2" name="__codelineno-34-2" href="#__codelineno-34-2"></a><span class="w">    </span><span class="nx">ErrInvalidBackend</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">errors</span><span class="p">.</span><span class="nx">New</span><span class="p">(</span><span class="s">&quot;invalid storage backend configuration&quot;</span><span class="p">)</span>
+<a id="__codelineno-34-3" name="__codelineno-34-3" href="#__codelineno-34-3"></a><span class="w">    </span><span class="nx">ErrClosed</span><span class="w">         </span><span class="p">=</span><span class="w"> </span><span class="nx">errors</span><span class="p">.</span><span class="nx">New</span><span class="p">(</span><span class="s">&quot;lake is closed&quot;</span><span class="p">)</span>
 <a id="__codelineno-34-4" name="__codelineno-34-4" href="#__codelineno-34-4"></a><span class="p">)</span>
 </code></pre></div>
 <p><code>IntegrityRejectionError</code> is returned by ingestion when <code>IngestIntegrityEnforce</code>
@@ -2057,7 +2057,7 @@ rejects an event; it carries the failing <code>integrity.EventResult</code>.</p>
       <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.sections", "navigation.expand", "navigation.top", "search.suggest", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
       
     
   </body>

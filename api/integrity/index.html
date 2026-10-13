@@ -23,7 +23,7 @@
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
     
     
       
@@ -31,7 +31,7 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
       
         
         <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
@@ -1104,18 +1104,18 @@ events, using the cryptographic primitives from
 <a href="https://github.com/grokify/ocsf-schema-go">ocsf-schema-go/recordintegrity</a>.</p>
 <h2 id="package">Package<a class="headerlink" href="#package" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">import</span><span class="w"> </span><span class="p">(</span>
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">    </span><span class="s">"github.com/grokify/ocsf-lake/pkg/integrity"</span>
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">    </span><span class="nx">ri</span><span class="w"> </span><span class="s">"github.com/grokify/ocsf-schema-go/recordintegrity"</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">    </span><span class="s">&quot;github.com/grokify/ocsf-lake/pkg/integrity&quot;</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">    </span><span class="nx">ri</span><span class="w"> </span><span class="s">&quot;github.com/grokify/ocsf-schema-go/recordintegrity&quot;</span>
 <a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="p">)</span>
 </code></pre></div>
 <h2 id="policy">Policy<a class="headerlink" href="#policy" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nx">policy</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">integrity</span><span class="p">.</span><span class="nx">DefaultPolicy</span><span class="p">()</span><span class="w"> </span><span class="c1">// AllowUnsigned: true</span>
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="nx">policy</span><span class="p">.</span><span class="nx">Verify</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">ri</span><span class="p">.</span><span class="nx">VerifyOptions</span><span class="p">{</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="nx">policy</span><span class="p">.</span><span class="nx">Verify</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">ri</span><span class="p">.</span><span class="nx">VerifyOptions</span><span class="p">{</span>
 <a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">    </span><span class="nx">Certificates</span><span class="p">:</span><span class="w">     </span><span class="nx">signerCerts</span><span class="p">,</span><span class="w">          </span><span class="c1">// candidate signer certificates</span>
 <a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">    </span><span class="nx">PinnedCertSHA256</span><span class="p">:</span><span class="w"> </span><span class="p">[]</span><span class="kt">string</span><span class="p">{</span><span class="nx">pin</span><span class="p">},</span><span class="w">        </span><span class="c1">// and/or Roots: *x509.CertPool</span>
 <a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="p">}</span>
-<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="nx">policy</span><span class="p">.</span><span class="nx">RecordReports</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span><span class="w">      </span><span class="c1">// persist every check run</span>
-<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="nx">policy</span><span class="p">.</span><span class="nx">RecordEventStatus</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span><span class="w">  </span><span class="c1">// stamp integrity_status on checked events</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="nx">policy</span><span class="p">.</span><span class="nx">RecordReports</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="kc">true</span><span class="w">      </span><span class="c1">// persist every check run</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="nx">policy</span><span class="p">.</span><span class="nx">RecordEventStatus</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="kc">true</span><span class="w">  </span><span class="c1">// stamp integrity_status on checked events</span>
 </code></pre></div>
 <ul>
 <li><code>AllowUnsigned: true</code> (default) reports unsigned events as warnings under
@@ -1131,10 +1131,10 @@ events, using the cryptographic primitives from
 <a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="nx">res</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">checker</span><span class="p">.</span><span class="nx">CheckEvent</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span><span class="w"> </span><span class="nx">id</span><span class="p">)</span><span class="w">          </span><span class="c1">// one-off, on-demand</span>
 <a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="nx">report</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">checker</span><span class="p">.</span><span class="nx">CheckAll</span><span class="p">(</span><span class="nx">ctx</span><span class="p">)</span><span class="w">             </span><span class="c1">// full sweep</span>
 <a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="nx">report</span><span class="p">,</span><span class="w"> </span><span class="nx">cp</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">checker</span><span class="p">.</span><span class="nx">CheckIncremental</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span><span class="w"> </span><span class="nx">checkpoint</span><span class="p">)</span><span class="w"> </span><span class="c1">// since checkpoint</span>
-<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="nx">report</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">checker</span><span class="p">.</span><span class="nx">CheckSample</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span><span class="w"> </span><span class="nx">integrity</span><span class="p">.</span><span class="nx">SamplePolicy</span><span class="p">{</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="nx">report</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">checker</span><span class="p">.</span><span class="nx">CheckSample</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span><span class="w"> </span><span class="nx">integrity</span><span class="p">.</span><span class="nx">SamplePolicy</span><span class="p">{</span>
 <a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="w">    </span><span class="nx">Percent</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="nx">MaxEvents</span><span class="p">:</span><span class="w"> </span><span class="mi">1000</span><span class="p">,</span><span class="w">                 </span><span class="c1">// % of events, capped per run</span>
 <a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="p">})</span>
-<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="nx">chainReport</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">checker</span><span class="p">.</span><span class="nx">CheckChain</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span><span class="w"> </span><span class="s">"audit-log-2026-09"</span><span class="p">)</span>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="nx">chainReport</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">checker</span><span class="p">.</span><span class="nx">CheckChain</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;audit-log-2026-09&quot;</span><span class="p">)</span>
 </code></pre></div>
 <p><code>CheckChain</code> resolves chain members by attestation <code>chain_uid</code>, verifies each event,
 and validates every <code>prev_event</code> link against the resolved predecessor.</p>
@@ -1239,7 +1239,7 @@ sign every event it receives, optionally chaining them.</p>
       <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.sections", "navigation.expand", "navigation.top", "search.suggest", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
       
     
   </body>
