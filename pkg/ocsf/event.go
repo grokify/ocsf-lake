@@ -1,57 +1,18 @@
-// Package ocsf provides Go types for OCSF (Open Cybersecurity Schema Framework) events.
+// Package ocsf provides the storage-side representation of OCSF events for
+// the lake.
+//
+// The OCSF standard itself — generated event/object structs, classification
+// constants, caption maps, and the class-UID registry — lives in
+// github.com/grokify/ocsf-schema-go (ocsf/events, ocsf/objects). This package
+// only holds what is specific to storing events in a data lake.
 package ocsf
 
 import (
 	"encoding/json"
 	"time"
+
+	"github.com/grokify/ocsf-schema-go/ocsf/events"
 )
-
-// Event represents the base OCSF event structure with common fields
-// shared across all event classes.
-type Event struct {
-	// Classification (required)
-	ClassUID    int    `json:"class_uid"`
-	ClassName   string `json:"class_name,omitempty"`
-	CategoryUID int    `json:"category_uid"`
-	ActivityID  int    `json:"activity_id"`
-	TypeUID     int    `json:"type_uid"`
-	TypeName    string `json:"type_name,omitempty"`
-
-	// Severity
-	SeverityID int    `json:"severity_id,omitempty"`
-	Severity   string `json:"severity,omitempty"`
-
-	// Time (required - epoch milliseconds)
-	Time      int64 `json:"time"`
-	StartTime int64 `json:"start_time,omitempty"`
-	EndTime   int64 `json:"end_time,omitempty"`
-	Duration  int64 `json:"duration,omitempty"`
-	Timezone  int   `json:"timezone_offset,omitempty"`
-
-	// Status
-	StatusID     int    `json:"status_id,omitempty"`
-	Status       string `json:"status,omitempty"`
-	StatusCode   string `json:"status_code,omitempty"`
-	StatusDetail string `json:"status_detail,omitempty"`
-
-	// Content
-	Message  string         `json:"message,omitempty"`
-	Metadata *EventMetadata `json:"metadata,omitempty"`
-
-	// Raw data
-	RawData     string `json:"raw_data,omitempty"`
-	RawDataHash string `json:"raw_data_hash,omitempty"`
-
-	// Counts
-	Count int `json:"count,omitempty"`
-
-	// Observables and enrichments
-	Observables []any `json:"observables,omitempty"`
-	Enrichments []any `json:"enrichments,omitempty"`
-
-	// Extensibility
-	Unmapped map[string]any `json:"unmapped,omitempty"`
-}
 
 // StoredEvent represents an OCSF event as stored in the data lake.
 // It includes the original payload plus storage metadata.
@@ -80,17 +41,50 @@ type StoredEvent struct {
 
 	// Raw original event (optional)
 	RawData string `json:"raw_data,omitempty"`
+
+	// Record-integrity check state (optional; maintained by the integrity
+	// checker and by verify-on-ingest)
+	IntegrityStatus    string     `json:"integrity_status,omitempty"`
+	IntegrityCheckedAt *time.Time `json:"integrity_checked_at,omitempty"`
 }
 
-// ParseEvent parses a JSON payload into a base Event structure.
-// It extracts only the common OCSF fields; class-specific fields
-// remain in the original JSON.
-func ParseEvent(data []byte) (*Event, error) {
-	var event Event
-	if err := json.Unmarshal(data, &event); err != nil {
+// IntegrityCheckRecord is a persisted record-integrity check run: an audit
+// trail of the checks themselves plus incremental checkpoint state.
+type IntegrityCheckRecord struct {
+	ID         string    `json:"id"`
+	Kind       string    `json:"kind"` // event, all, incremental, sample, chain, ingest
+	StartedAt  time.Time `json:"started_at"`
+	FinishedAt time.Time `json:"finished_at"`
+
+	Checked  int `json:"checked"`
+	Verified int `json:"verified"`
+	Unsigned int `json:"unsigned"`
+	Failed   int `json:"failed"`
+
+	// Checkpoint is the incremental checkpoint (ingested_after) reached by
+	// this run, when the run was incremental.
+	Checkpoint *time.Time `json:"checkpoint,omitempty"`
+
+	// Report is the full check report as JSON-compatible data.
+	Report map[string]any `json:"report,omitempty"`
+
+	CreatedAt time.Time `json:"created_at"`
+}
+
+// Decode unmarshals the stored payload into the concrete generated event
+// struct for its class (e.g. *events.Authentication for class_uid 3002),
+// dispatching via the ocsf-schema-go class-UID registry.
+func (e *StoredEvent) Decode() (any, error) {
+	data, err := json.Marshal(e.Payload)
+	if err != nil {
 		return nil, err
 	}
-	return &event, nil
+	return events.UnmarshalEvent(data)
+}
+
+// TimeAsTime converts the OCSF epoch millisecond timestamp to time.Time.
+func (e *StoredEvent) TimeAsTime() time.Time {
+	return time.UnixMilli(e.Time)
 }
 
 // ParsePayload parses a JSON payload into a generic map for storage.
@@ -102,17 +96,15 @@ func ParsePayload(data []byte) (map[string]any, error) {
 	return payload, nil
 }
 
-// TimeAsTime converts the OCSF epoch millisecond timestamp to time.Time.
-func (e *Event) TimeAsTime() time.Time {
-	return time.UnixMilli(e.Time)
+// CalculateTypeUID computes the type_uid from class_uid and activity_id.
+// OCSF formula: type_uid = class_uid * 100 + activity_id
+func CalculateTypeUID(classUID, activityID int) int {
+	return classUID*100 + activityID
 }
 
-// StartTimeAsTime converts the OCSF start_time epoch millisecond timestamp to time.Time.
-func (e *Event) StartTimeAsTime() time.Time {
-	return time.UnixMilli(e.StartTime)
-}
-
-// EndTimeAsTime converts the OCSF end_time epoch millisecond timestamp to time.Time.
-func (e *Event) EndTimeAsTime() time.Time {
-	return time.UnixMilli(e.EndTime)
+// ParseTypeUID extracts class_uid and activity_id from type_uid.
+func ParseTypeUID(typeUID int) (classUID, activityID int) {
+	classUID = typeUID / 100
+	activityID = typeUID % 100
+	return
 }
