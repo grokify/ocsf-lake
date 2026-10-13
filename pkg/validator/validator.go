@@ -1,4 +1,5 @@
-// Package validator provides OCSF event validation against JSON Schema.
+// Package validator provides OCSF event validation for the lake, backed by
+// the compiled OCSF schema embedded in github.com/grokify/ocsf-schema-go.
 package validator
 
 import (
@@ -9,13 +10,8 @@ import (
 
 // Common validation errors.
 var (
-	ErrMissingClassUID    = errors.New("missing required field: class_uid")
-	ErrMissingCategoryUID = errors.New("missing required field: category_uid")
-	ErrMissingActivityID  = errors.New("missing required field: activity_id")
-	ErrMissingTypeUID     = errors.New("missing required field: type_uid")
-	ErrMissingTime        = errors.New("missing required field: time")
-	ErrInvalidJSON        = errors.New("invalid JSON")
-	ErrSchemaNotFound     = errors.New("schema not found for class_uid")
+	ErrInvalidJSON    = errors.New("invalid JSON")
+	ErrSchemaNotFound = errors.New("schema not found for class_uid")
 )
 
 // Validator validates OCSF events.
@@ -54,24 +50,14 @@ func (r *ValidationResult) Error() string {
 type Mode int
 
 const (
-	// ModeStrict rejects any invalid events.
+	// ModeStrict rejects events with any schema violation (missing required
+	// attributes, wrong types, invalid enum values, constraint violations,
+	// inconsistent classification UIDs).
 	ModeStrict Mode = iota
-	// ModePermissive accepts events with warnings for non-critical issues.
+	// ModePermissive rejects only structurally unusable events (malformed
+	// JSON, missing class_uid, unknown event class); other schema
+	// violations are tolerated.
 	ModePermissive
 	// ModeDisabled skips validation entirely.
 	ModeDisabled
 )
-
-// Options configures the validator behavior.
-type Options struct {
-	Mode          Mode
-	SchemaVersion string
-}
-
-// DefaultOptions returns the default validator options.
-func DefaultOptions() Options {
-	return Options{
-		Mode:          ModeStrict,
-		SchemaVersion: "1.3.0",
-	}
-}
