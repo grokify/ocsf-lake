@@ -39,6 +39,8 @@ nav:
       - Integrity: api/integrity.md
       - Seed: api/seed.md
   - Examples: examples.md
+  - Releases:
+      - v0.2.0: releases/v0.2.0.md
 
 markdown_extensions:
   - pymdownx.highlight:

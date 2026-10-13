@@ -1,0 +1,172 @@
+{
+  "irVersion": "1.0",
+  "project": "ocsf-lake",
+  "repository": "https://github.com/grokify/ocsf-lake",
+  "versioning": "semver",
+  "commitConvention": "conventional",
+  "maintainers": [
+    "grokify",
+    "johncwang@gmail.com"
+  ],
+  "releases": [
+    {
+      "version": "v0.2.0",
+      "date": "2026-10-13",
+      "commit": "2c23bb9",
+      "highlights": [
+        {
+          "description": "OCSF types, constants, and validation now come from `github.com/grokify/ocsf-schema-go`; the lake no longer carries a hand-written copy of the standard",
+          "commit": "da17603"
+        },
+        {
+          "description": "Record-integrity support end to end: verify-on-ingest, attest-on-ingest with chaining, on-demand/full/incremental/sample/chain checks, and persisted check reports",
+          "commit": "69f39f9"
+        },
+        {
+          "description": "New `ocsflake` CLI covering ingest, query, integrity checks, signing, verification, and test-data seeding",
+          "commit": "9d53d63"
+        }
+      ],
+      "added": [
+        {
+          "description": "[validator] `OCSFValidator` backed by the compiled OCSF schema embedded in ocsf-schema-go, with strict, permissive, and disabled modes and no schema files needed at runtime",
+          "commit": "8b4a2f5",
+          "rmis": [
+            "RMI-OCSFLAKE-005"
+          ]
+        },
+        {
+          "description": "[ocsf] `StoredEvent.Decode()` returns the concrete generated event struct for a stored payload via the class-UID registry",
+          "commit": "da17603",
+          "rmis": [
+            "RMI-OCSFLAKE-006"
+          ]
+        },
+        {
+          "description": "[integrity] Record-integrity checker with on-demand, full, incremental, sample, and chain modes and an unsigned-events policy",
+          "commit": "69f39f9",
+          "rmis": [
+            "RMI-OCSFLAKE-007",
+            "RMI-OCSFLAKE-008"
+          ]
+        },
+        {
+          "description": "[storage] `integrity_status` and `integrity_checked_at` event columns, a persisted `IntegrityCheck` entity, and `IngestedFrom` / `IntegrityStatus` query filters",
+          "commit": "808c79d",
+          "rmis": [
+            "RMI-OCSFLAKE-008",
+            "RMI-OCSFLAKE-012"
+          ]
+        },
+        {
+          "description": "[lake] Typed ingest (`IngestTyped`), verify-on-ingest (monitor/enforce), attest-on-ingest with optional chaining, raw-data retention, and an unknown-attribute policy",
+          "commit": "854cbc3",
+          "rmis": [
+            "RMI-OCSFLAKE-006",
+            "RMI-OCSFLAKE-009",
+            "RMI-OCSFLAKE-013",
+            "RMI-OCSFLAKE-014"
+          ]
+        },
+        {
+          "description": "[seed] Deterministic schema-valid test-data generator with signed, tampered, and chained event mixes",
+          "commit": "cd3e6a5",
+          "rmis": [
+            "RMI-OCSFLAKE-011"
+          ]
+        },
+        {
+          "description": "[cmd/ocsflake] CLI with `ingest`, `get`, `query`, `count`, `check` (event, all, incremental, sample, chain, reports), `sign`, `verify`, and `seed` commands",
+          "commit": "9d53d63",
+          "rmis": [
+            "RMI-OCSFLAKE-010"
+          ]
+        }
+      ],
+      "changed": [
+        {
+          "description": "[ocsf] Hand-written `Event`, `ParseEvent`, and classification/metadata constants removed in favour of `ocsf-schema-go/ocsf/events` and `ocsf/objects`",
+          "breaking": true,
+          "commit": "da17603",
+          "rmis": [
+            "RMI-OCSFLAKE-004"
+          ]
+        },
+        {
+          "description": "[validator] JSON Schema validator, `validator.Options`/`DefaultOptions`, and the `ErrMissing*` sentinel errors removed; strict mode now enforces full schema semantics and permissive mode rejects only structurally unusable events",
+          "breaking": true,
+          "commit": "8b4a2f5",
+          "rmis": [
+            "RMI-OCSFLAKE-005"
+          ]
+        },
+        {
+          "description": "[lake] `Close` is idempotent and concurrency-safe, and batch ingest errors report the failing event position",
+          "commit": "854cbc3",
+          "rmis": [
+            "RMI-OCSFLAKE-015"
+          ]
+        }
+      ],
+      "documentation": [
+        {
+          "description": "Updated README, MkDocs site, and API reference for the ocsf-schema-go integration; added CLI, integrity, and seed guides, specs, and release notes",
+          "commit": "2c23bb9"
+        }
+      ],
+      "dependencies": [
+        {
+          "description": "Added `github.com/grokify/ocsf-schema-go` v0.1.0 and `github.com/spf13/cobra` v1.10.2",
+          "commit": "af18b2d"
+        },
+        {
+          "description": "Removed `github.com/santhosh-tekuri/jsonschema/v6`",
+          "commit": "af18b2d"
+        },
+        {
+          "description": "Bumped `github.com/mattn/go-sqlite3` from v1.14.28 to v1.14.52",
+          "commit": "e3c1e01"
+        }
+      ]
+    },
+    {
+      "version": "v0.1.0",
+      "date": "2026-06-29",
+      "commit": "d370950",
+      "highlights": [
+        {
+          "description": "Initial release: OCSF event data lake with Ent-backed storage (SQLite and PostgreSQL), a Lake facade, and JSON Schema validation",
+          "commit": "d370950"
+        }
+      ],
+      "added": [
+        {
+          "description": "[ocsf] Core OCSF types and constants",
+          "commit": "422fd9d"
+        },
+        {
+          "description": "[ent] Ent schema for event storage",
+          "commit": "ae79820"
+        },
+        {
+          "description": "[validator] OCSF event validation",
+          "commit": "9d4a83d"
+        },
+        {
+          "description": "[storage] Storage interface and Ent implementation",
+          "commit": "84d3f49"
+        },
+        {
+          "description": "[lake] Lake facade for OCSF event management",
+          "commit": "b0fe69a"
+        }
+      ],
+      "documentation": [
+        {
+          "description": "README and MkDocs documentation site",
+          "commit": "73bf7a0"
+        }
+      ]
+    }
+  ]
+}
