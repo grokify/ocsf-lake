@@ -3,7 +3,6 @@
 A Go library for storing, validating, and querying [OCSF](https://ocsf.io/) (Open Cybersecurity Schema Framework) events with pluggable storage backends.
 
 [![GoDoc](https://godoc.org/github.com/grokify/ocsf-lake?status.svg)](https://godoc.org/github.com/grokify/ocsf-lake)
-[![Go Report Card](https://goreportcard.com/badge/github.com/grokify/ocsf-lake)](https://goreportcard.com/report/github.com/grokify/ocsf-lake)
 [![Docs](https://img.shields.io/badge/docs-MkDocs-blue)](https://grokify.github.io/ocsf-lake/)
 
 ## Features
