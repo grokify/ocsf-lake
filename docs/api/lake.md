@@ -69,7 +69,9 @@ postgres://user:password@host:port/database?sslmode=disable
 func WithStrictValidation() Option
 ```
 
-Rejects events missing required OCSF fields. This is the default mode.
+Rejects events with any schema violation (missing required attributes, wrong
+types, invalid enums, violated constraints, inconsistent UIDs). This is the
+default mode.
 
 ### WithPermissiveValidation
 
@@ -77,7 +79,8 @@ Rejects events missing required OCSF fields. This is the default mode.
 func WithPermissiveValidation() Option
 ```
 
-Accepts events with warnings for non-critical issues.
+Rejects only structurally unusable events (malformed JSON, missing or unknown
+`class_uid`); other schema violations are tolerated.
 
 ### WithNoValidation
 
@@ -93,7 +96,9 @@ Skips validation entirely.
 func WithSchemaVersion(version string) Option
 ```
 
-Sets the OCSF schema version. Default: `"1.3.0"`.
+Sets the OCSF schema version recorded on stored events. Defaults to
+`events.SchemaVersion` from ocsf-schema-go (the version the bindings were
+generated from).
 
 ### WithDefaultSource
 
@@ -102,6 +107,48 @@ func WithDefaultSource(source string) Option
 ```
 
 Sets the default source for events that don't specify one.
+
+### WithUnknownAttributes
+
+```go
+func WithUnknownAttributes(m validate.UnknownMode) Option
+```
+
+Controls how attributes absent from the OCSF schema are treated during validation:
+`validate.UnknownWarn` (default), `validate.UnknownIgnore`, or
+`validate.UnknownError` (strict mode then rejects them).
+
+### WithRawDataRetention
+
+```go
+func WithRawDataRetention() Option
+```
+
+Stores each event's original JSON bytes as received (before any lake attestation)
+in `StoredEvent.RawData`, preserving forensic evidence at the cost of roughly
+doubling per-event storage.
+
+### WithIngestIntegrity
+
+```go
+func WithIngestIntegrity(mode IngestIntegrityMode, policy integrity.Policy) Option
+```
+
+Verifies producer `record_integrity` attestations during ingestion.
+`IngestIntegrityMonitor` stamps `integrity_status` on stored events without
+rejecting; `IngestIntegrityEnforce` rejects failing events with
+`*IntegrityRejectionError`. See [Integrity](integrity.md).
+
+### WithIngestAttestation
+
+```go
+func WithIngestAttestation(a AttestationOptions) Option
+```
+
+Makes the lake sign every ingested event with its own attestation, optionally
+chaining events tamper-evidently (`ChainUID`). The chain tail is process-local;
+persist `Lake.ChainTail()` and pass it back as `InitialChainTail` to continue a
+chain across restarts.
 
 ## Methods
 
@@ -134,6 +181,16 @@ func (l *Lake) IngestWithID(ctx context.Context, id string, event json.RawMessag
 ```
 
 Ingests an event with a specific ID (instead of auto-generating one).
+
+### IngestTyped
+
+```go
+func (l *Lake) IngestTyped(ctx context.Context, events ...any) error
+```
+
+Ingests typed events, such as the generated structs from
+`github.com/grokify/ocsf-schema-go/ocsf/events` (e.g. `events.Authentication`),
+through the same validation and indexing pipeline as `Ingest`.
 
 ### Get
 
@@ -215,6 +272,35 @@ func (l *Lake) QueryBySource(ctx context.Context, source string) ([]*ocsf.Stored
 func (l *Lake) QueryByTimeRange(ctx context.Context, from, to int64) ([]*ocsf.StoredEvent, error)
 ```
 
+## Integrity Methods
+
+### IntegrityChecker
+
+```go
+func (l *Lake) IntegrityChecker(policy integrity.Policy) *integrity.Checker
+```
+
+Returns a record-integrity checker over this lake's storage. See
+[Integrity](integrity.md) for check modes.
+
+### IntegrityReports
+
+```go
+func (l *Lake) IntegrityReports(ctx context.Context, kind string, limit int) ([]*ocsf.IntegrityCheckRecord, error)
+```
+
+Returns persisted check runs, newest first, optionally filtered by kind
+(`event`, `all`, `incremental`, `sample`, `chain`).
+
+### ChainTail
+
+```go
+func (l *Lake) ChainTail() []byte
+```
+
+The last attested event JSON when attest-on-ingest chaining is enabled; persist it
+to continue the chain across restarts.
+
 ## Errors
 
 ```go
@@ -223,3 +309,6 @@ var (
     ErrClosed         = errors.New("lake is closed")
 )
 ```
+
+`IntegrityRejectionError` is returned by ingestion when `IngestIntegrityEnforce`
+rejects an event; it carries the failing `integrity.EventResult`.

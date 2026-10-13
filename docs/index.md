@@ -6,9 +6,12 @@ A Go library for storing, validating, and querying [OCSF](https://ocsf.io/) (Ope
 
 - **OCSF Event Storage** - Store OCSF events with automatic extraction of key fields for indexing
 - **Pluggable Backends** - SQLite (in-memory or file) and PostgreSQL support via Ent ORM
-- **Event Validation** - Validate events against OCSF schema (strict or permissive modes)
+- **Real Schema Validation** - events checked against the compiled OCSF schema (required attributes, types, enums, constraints, UID consistency) embedded in [ocsf-schema-go](https://github.com/grokify/ocsf-schema-go)
+- **Record Integrity** - verify signed events (`record_integrity` profile): on-demand, full, incremental, sampled, and chain checks; verify or attest at ingest; persisted check reports
+- **Type-Safe** - generated OCSF structs and constants from ocsf-schema-go, with typed ingest and class-UID decode
 - **Flexible Querying** - Query by class, category, severity, source, time range, and more
-- **Type-Safe** - Go types for OCSF classifications, severities, and statuses
+- **CLI** - [`ocsflake`](cli.md): ingest, query, check, seed, sign, verify
+- **Test Data** - deterministic, schema-valid seeding with signed/tampered/chained mixes
 
 ## Quick Example
 
@@ -22,7 +25,7 @@ import (
     "log"
 
     "github.com/grokify/ocsf-lake/pkg/lake"
-    "github.com/grokify/ocsf-lake/pkg/ocsf"
+    "github.com/grokify/ocsf-schema-go/ocsf/events"
 
     _ "github.com/mattn/go-sqlite3"
 )
@@ -45,7 +48,10 @@ func main() {
         "type_uid": 300201,
         "time": 1704067200000,
         "severity_id": 1,
-        "message": "User logged in successfully"
+        "message": "User logged in successfully",
+        "metadata": {"version": "1.10.0", "product": {"name": "my-idp"}},
+        "user": {"name": "john.doe"},
+        "dst_endpoint": {"hostname": "auth.example.com"}
     }`)
 
     if err := l.Ingest(ctx, event); err != nil {
@@ -53,12 +59,12 @@ func main() {
     }
 
     // Query authentication events
-    events, err := l.QueryByClassUID(ctx, ocsf.ClassUIDAuthentication)
+    stored, err := l.QueryByClassUID(ctx, events.ClassUIDAuthentication)
     if err != nil {
         log.Fatal(err)
     }
 
-    fmt.Printf("Found %d authentication events\n", len(events))
+    fmt.Printf("Found %d authentication events\n", len(stored))
 }
 ```
 

@@ -17,6 +17,12 @@ type Storage interface {
     Query(ctx context.Context, q *Query) ([]*ocsf.StoredEvent, error)
     Count(ctx context.Context, q *Query) (int, error)
     Delete(ctx context.Context, q *Query) (int, error)
+
+    // Record-integrity persistence (see the integrity package)
+    SetEventIntegrity(ctx context.Context, id, status string, checkedAt time.Time) error
+    SaveIntegrityReport(ctx context.Context, rec *ocsf.IntegrityCheckRecord) error
+    ListIntegrityReports(ctx context.Context, kind string, limit int) ([]*ocsf.IntegrityCheckRecord, error)
+
     Close() error
 }
 ```
@@ -172,9 +178,11 @@ type Query struct {
     Source      *string
     TimeFrom    *int64
     TimeTo      *int64
+    IngestedFrom *time.Time // events ingested strictly after this time
+    IntegrityStatus *string  // recorded record-integrity status
     Limit       int
     Offset      int
-    OrderBy     string
+    OrderBy     string      // "time" or "ingested_at"
     OrderDesc   bool
 }
 ```

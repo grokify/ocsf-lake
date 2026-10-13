@@ -87,7 +87,9 @@ event := json.RawMessage(`{
             "name": "auth-service",
             "vendor_name": "My Company"
         }
-    }
+    },
+    "user": {"name": "john.doe"},
+    "dst_endpoint": {"hostname": "auth.example.com"}
 }`)
 
 err := l.Ingest(ctx, event)
@@ -98,15 +100,16 @@ if err != nil {
 
 ### Required Fields
 
-Every OCSF event must include:
+Events are validated against the compiled OCSF schema from
+[ocsf-schema-go](https://github.com/grokify/ocsf-schema-go). In the default strict mode,
+each event class's required attributes and constraints apply (for Authentication:
+`activity_id`, `category_uid`, `class_uid`, `metadata`, `severity_id`, `time`,
+`type_uid`, `user`, and one of `dst_endpoint`/`service`). In permissive mode only the
+structural minimum is enforced:
 
 | Field | Type | Description |
 |-------|------|-------------|
-| `class_uid` | int | Event class identifier |
-| `category_uid` | int | Event category identifier |
-| `activity_id` | int | Activity type identifier |
-| `type_uid` | int | Unique type ID (class_uid * 100 + activity_id) |
-| `time` | int64 | Event timestamp (epoch milliseconds) |
+| `class_uid` | int | Event class identifier (must be a known OCSF class) |
 
 ### Batch Ingestion
 
@@ -122,12 +125,12 @@ err := l.Ingest(ctx, events...)
 ### Using Query Builder
 
 ```go
-import "github.com/grokify/ocsf-lake/pkg/ocsf"
+import "github.com/grokify/ocsf-schema-go/ocsf/events"
 
 // Query high-severity authentication events
 q := l.QueryBuilder().
-    WithClassUID(ocsf.ClassUIDAuthentication).
-    WithSeverityID(ocsf.SeverityIDHigh).
+    WithClassUID(events.ClassUIDAuthentication).
+    WithSeverityID(events.SeverityIDHigh).
     WithLimit(100).
     OrderByTime(true). // descending
     Build()
@@ -139,13 +142,13 @@ events, err := l.Query(ctx, q)
 
 ```go
 // Query by class
-events, _ := l.QueryByClassUID(ctx, ocsf.ClassUIDAuthentication)
+events, _ := l.QueryByClassUID(ctx, events.ClassUIDAuthentication)
 
 // Query by category
-events, _ := l.QueryByCategoryUID(ctx, ocsf.CategoryUIDNetworkActivity)
+events, _ := l.QueryByCategoryUID(ctx, events.CategoryUIDNetwork)
 
 // Query by severity
-events, _ := l.QueryBySeverityID(ctx, ocsf.SeverityIDCritical)
+events, _ := l.QueryBySeverityID(ctx, events.SeverityIDCritical)
 
 // Query by source
 events, _ := l.QueryBySource(ctx, "aws-cloudtrail")
@@ -173,7 +176,7 @@ events, err := l.Query(ctx, q)
 
 ```go
 count, err := l.Count(ctx, l.QueryBuilder().
-    WithCategoryUID(ocsf.CategoryUIDIAMActivity).
+    WithCategoryUID(events.CategoryUIDIAM).
     Build())
 
 fmt.Printf("Total IAM events: %d\n", count)
@@ -235,7 +238,7 @@ All options can be combined:
 l, err := lake.New(ctx,
     lake.WithSQLiteFile("/data/ocsf.db"),
     lake.WithStrictValidation(),
-    lake.WithSchemaVersion("1.3.0"),
+    lake.WithSchemaVersion(events.SchemaVersion), // defaults to the embedded schema version
     lake.WithDefaultSource("my-app"),
 )
 ```

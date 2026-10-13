@@ -30,11 +30,14 @@ theme:
 nav:
   - Home: index.md
   - Getting Started: getting-started.md
+  - CLI: cli.md
   - API Reference:
       - Lake: api/lake.md
       - Storage: api/storage.md
       - OCSF Types: api/ocsf.md
       - Validator: api/validator.md
+      - Integrity: api/integrity.md
+      - Seed: api/seed.md
   - Examples: examples.md
 
 markdown_extensions:

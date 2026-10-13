@@ -15,7 +15,7 @@ import (
     "log"
 
     "github.com/grokify/ocsf-lake/pkg/lake"
-    "github.com/grokify/ocsf-lake/pkg/ocsf"
+    "github.com/grokify/ocsf-schema-go/ocsf/events"
 
     _ "github.com/mattn/go-sqlite3"
 )
@@ -50,6 +50,8 @@ func main() {
                 "vendor_name": "Amazon Web Services"
             }
         },
+        "user": {"name": "admin@example.com"},
+        "dst_endpoint": {"svc_name": "signin.amazonaws.com"},
         "unmapped": {
             "eventSource": "signin.amazonaws.com",
             "eventName": "ConsoleLogin",
@@ -79,7 +81,7 @@ import (
     "time"
 
     "github.com/grokify/ocsf-lake/pkg/lake"
-    "github.com/grokify/ocsf-lake/pkg/ocsf"
+    "github.com/grokify/ocsf-schema-go/ocsf/events"
 
     _ "github.com/mattn/go-sqlite3"
 )
@@ -98,8 +100,8 @@ func main() {
     to := time.Now().UnixMilli()
 
     q := l.QueryBuilder().
-        WithClassUID(ocsf.ClassUIDAuthentication).
-        WithStatusID(ocsf.StatusIDFailure).
+        WithClassUID(events.ClassUIDAuthentication).
+        WithStatusID(events.StatusIDFailure).
         WithTimeRange(from, to).
         OrderByTime(true).
         WithLimit(100).
@@ -134,7 +136,7 @@ import (
     "time"
 
     "github.com/grokify/ocsf-lake/pkg/lake"
-    "github.com/grokify/ocsf-lake/pkg/ocsf"
+    "github.com/grokify/ocsf-schema-go/ocsf/events"
     "github.com/grokify/ocsf-lake/pkg/storage"
 
     _ "github.com/mattn/go-sqlite3"
@@ -161,11 +163,11 @@ func main() {
         id   int
         name string
     }{
-        {ocsf.SeverityIDCritical, "Critical"},
-        {ocsf.SeverityIDHigh, "High"},
-        {ocsf.SeverityIDMedium, "Medium"},
-        {ocsf.SeverityIDLow, "Low"},
-        {ocsf.SeverityIDInformational, "Informational"},
+        {events.SeverityIDCritical, "Critical"},
+        {events.SeverityIDHigh, "High"},
+        {events.SeverityIDMedium, "Medium"},
+        {events.SeverityIDLow, "Low"},
+        {events.SeverityIDInformational, "Informational"},
     }
 
     for _, sev := range severities {
@@ -185,10 +187,10 @@ func main() {
         id   int
         name string
     }{
-        {ocsf.CategoryUIDSystemActivity, "System Activity"},
-        {ocsf.CategoryUIDFindingsActivity, "Findings"},
-        {ocsf.CategoryUIDIAMActivity, "IAM"},
-        {ocsf.CategoryUIDNetworkActivity, "Network"},
+        {events.CategoryUIDSystem, "System Activity"},
+        {events.CategoryUIDFindings, "Findings"},
+        {events.CategoryUIDIAM, "IAM"},
+        {events.CategoryUIDNetwork, "Network"},
     }
 
     for _, cat := range categories {
@@ -217,6 +219,7 @@ import (
 
     "github.com/grokify/ocsf-lake/pkg/lake"
     "github.com/grokify/ocsf-lake/pkg/ocsf"
+    "github.com/grokify/ocsf-schema-go/ocsf/events"
 
     _ "github.com/mattn/go-sqlite3"
 )
@@ -231,30 +234,30 @@ func main() {
     defer l.Close()
 
     // Create batch of events
-    var events []json.RawMessage
+    var batch []json.RawMessage
     baseTime := time.Now().UnixMilli()
 
     for i := 0; i < 1000; i++ {
         event := map[string]any{
-            "class_uid":    ocsf.ClassUIDNetworkActivity,
-            "category_uid": ocsf.CategoryUIDNetworkActivity,
+            "class_uid":    events.ClassUIDNetworkActivity,
+            "category_uid": events.CategoryUIDNetwork,
             "activity_id":  1,
-            "type_uid":     ocsf.CalculateTypeUID(ocsf.ClassUIDNetworkActivity, 1),
+            "type_uid":     ocsf.CalculateTypeUID(events.ClassUIDNetworkActivity, 1),
             "time":         baseTime + int64(i*1000),
-            "severity_id":  ocsf.SeverityIDInformational,
+            "severity_id":  events.SeverityIDInformational,
         }
 
         data, _ := json.Marshal(event)
-        events = append(events, data)
+        batch = append(batch, data)
     }
 
     // Ingest batch
     start := time.Now()
-    if err := l.Ingest(ctx, events...); err != nil {
+    if err := l.Ingest(ctx, batch...); err != nil {
         log.Fatal(err)
     }
 
-    log.Printf("Ingested %d events in %v", len(events), time.Since(start))
+    log.Printf("Ingested %d events in %v", len(batch), time.Since(start))
 }
 ```
 
@@ -348,7 +351,7 @@ import (
     "entgo.io/ent/dialect/sql"
     "github.com/grokify/ocsf-lake/ent/event"
     "github.com/grokify/ocsf-lake/pkg/lake"
-    "github.com/grokify/ocsf-lake/pkg/ocsf"
+    "github.com/grokify/ocsf-schema-go/ocsf/events"
     "github.com/grokify/ocsf-lake/pkg/storage"
 
     _ "github.com/mattn/go-sqlite3"
@@ -371,10 +374,10 @@ func main() {
     events, err := client.Event.Query().
         Where(
             event.Or(
-                event.ClassUID(ocsf.ClassUIDAuthentication),
-                event.ClassUID(ocsf.ClassUIDNetworkActivity),
+                event.ClassUID(events.ClassUIDAuthentication),
+                event.ClassUID(events.ClassUIDNetworkActivity),
             ),
-            event.SeverityIDGTE(ocsf.SeverityIDHigh),
+            event.SeverityIDGTE(events.SeverityIDHigh),
         ).
         Order(event.ByTime(sql.OrderDesc())).
         Limit(50).
