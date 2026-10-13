@@ -15,6 +15,7 @@ import (
 	"entgo.io/ent/dialect"
 	"entgo.io/ent/dialect/sql"
 	"github.com/grokify/ocsf-lake/ent/event"
+	"github.com/grokify/ocsf-lake/ent/integritycheck"
 )
 
 // Client is the client that holds all ent builders.
@@ -24,6 +25,8 @@ type Client struct {
 	Schema *migrate.Schema
 	// Event is the client for interacting with the Event builders.
 	Event *EventClient
+	// IntegrityCheck is the client for interacting with the IntegrityCheck builders.
+	IntegrityCheck *IntegrityCheckClient
 }
 
 // NewClient creates a new client configured with the given options.
@@ -36,6 +39,7 @@ func NewClient(opts ...Option) *Client {
 func (c *Client) init() {
 	c.Schema = migrate.NewSchema(c.driver)
 	c.Event = NewEventClient(c.config)
+	c.IntegrityCheck = NewIntegrityCheckClient(c.config)
 }
 
 type (
@@ -126,9 +130,10 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 	cfg := c.config
 	cfg.driver = tx
 	return &Tx{
-		ctx:    ctx,
-		config: cfg,
-		Event:  NewEventClient(cfg),
+		ctx:            ctx,
+		config:         cfg,
+		Event:          NewEventClient(cfg),
+		IntegrityCheck: NewIntegrityCheckClient(cfg),
 	}, nil
 }
 
@@ -146,9 +151,10 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 	cfg := c.config
 	cfg.driver = &txDriver{tx: tx, drv: c.driver}
 	return &Tx{
-		ctx:    ctx,
-		config: cfg,
-		Event:  NewEventClient(cfg),
+		ctx:            ctx,
+		config:         cfg,
+		Event:          NewEventClient(cfg),
+		IntegrityCheck: NewIntegrityCheckClient(cfg),
 	}, nil
 }
 
@@ -178,12 +184,14 @@ func (c *Client) Close() error {
 // In order to add hooks to a specific client, call: `client.Node.Use(...)`.
 func (c *Client) Use(hooks ...Hook) {
 	c.Event.Use(hooks...)
+	c.IntegrityCheck.Use(hooks...)
 }
 
 // Intercept adds the query interceptors to all the entity clients.
 // In order to add interceptors to a specific client, call: `client.Node.Intercept(...)`.
 func (c *Client) Intercept(interceptors ...Interceptor) {
 	c.Event.Intercept(interceptors...)
+	c.IntegrityCheck.Intercept(interceptors...)
 }
 
 // Mutate implements the ent.Mutator interface.
@@ -191,6 +199,8 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 	switch m := m.(type) {
 	case *EventMutation:
 		return c.Event.mutate(ctx, m)
+	case *IntegrityCheckMutation:
+		return c.IntegrityCheck.mutate(ctx, m)
 	default:
 		return nil, fmt.Errorf("ent: unknown mutation type %T", m)
 	}
@@ -329,12 +339,145 @@ func (c *EventClient) mutate(ctx context.Context, m *EventMutation) (Value, erro
 	}
 }
 
+// IntegrityCheckClient is a client for the IntegrityCheck schema.
+type IntegrityCheckClient struct {
+	config
+}
+
+// NewIntegrityCheckClient returns a client for the IntegrityCheck from the given config.
+func NewIntegrityCheckClient(c config) *IntegrityCheckClient {
+	return &IntegrityCheckClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `integritycheck.Hooks(f(g(h())))`.
+func (c *IntegrityCheckClient) Use(hooks ...Hook) {
+	c.hooks.IntegrityCheck = append(c.hooks.IntegrityCheck, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `integritycheck.Intercept(f(g(h())))`.
+func (c *IntegrityCheckClient) Intercept(interceptors ...Interceptor) {
+	c.inters.IntegrityCheck = append(c.inters.IntegrityCheck, interceptors...)
+}
+
+// Create returns a builder for creating a IntegrityCheck entity.
+func (c *IntegrityCheckClient) Create() *IntegrityCheckCreate {
+	mutation := newIntegrityCheckMutation(c.config, OpCreate)
+	return &IntegrityCheckCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of IntegrityCheck entities.
+func (c *IntegrityCheckClient) CreateBulk(builders ...*IntegrityCheckCreate) *IntegrityCheckCreateBulk {
+	return &IntegrityCheckCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *IntegrityCheckClient) MapCreateBulk(slice any, setFunc func(*IntegrityCheckCreate, int)) *IntegrityCheckCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &IntegrityCheckCreateBulk{err: fmt.Errorf("calling to IntegrityCheckClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*IntegrityCheckCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &IntegrityCheckCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for IntegrityCheck.
+func (c *IntegrityCheckClient) Update() *IntegrityCheckUpdate {
+	mutation := newIntegrityCheckMutation(c.config, OpUpdate)
+	return &IntegrityCheckUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *IntegrityCheckClient) UpdateOne(_m *IntegrityCheck) *IntegrityCheckUpdateOne {
+	mutation := newIntegrityCheckMutation(c.config, OpUpdateOne, withIntegrityCheck(_m))
+	return &IntegrityCheckUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *IntegrityCheckClient) UpdateOneID(id string) *IntegrityCheckUpdateOne {
+	mutation := newIntegrityCheckMutation(c.config, OpUpdateOne, withIntegrityCheckID(id))
+	return &IntegrityCheckUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for IntegrityCheck.
+func (c *IntegrityCheckClient) Delete() *IntegrityCheckDelete {
+	mutation := newIntegrityCheckMutation(c.config, OpDelete)
+	return &IntegrityCheckDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *IntegrityCheckClient) DeleteOne(_m *IntegrityCheck) *IntegrityCheckDeleteOne {
+	return c.DeleteOneID(_m.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *IntegrityCheckClient) DeleteOneID(id string) *IntegrityCheckDeleteOne {
+	builder := c.Delete().Where(integritycheck.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &IntegrityCheckDeleteOne{builder}
+}
+
+// Query returns a query builder for IntegrityCheck.
+func (c *IntegrityCheckClient) Query() *IntegrityCheckQuery {
+	return &IntegrityCheckQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeIntegrityCheck},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a IntegrityCheck entity by its id.
+func (c *IntegrityCheckClient) Get(ctx context.Context, id string) (*IntegrityCheck, error) {
+	return c.Query().Where(integritycheck.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *IntegrityCheckClient) GetX(ctx context.Context, id string) *IntegrityCheck {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *IntegrityCheckClient) Hooks() []Hook {
+	return c.hooks.IntegrityCheck
+}
+
+// Interceptors returns the client interceptors.
+func (c *IntegrityCheckClient) Interceptors() []Interceptor {
+	return c.inters.IntegrityCheck
+}
+
+func (c *IntegrityCheckClient) mutate(ctx context.Context, m *IntegrityCheckMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&IntegrityCheckCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&IntegrityCheckUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&IntegrityCheckUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&IntegrityCheckDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown IntegrityCheck mutation op: %q", m.Op())
+	}
+}
+
 // hooks and interceptors per client, for fast access.
 type (
 	hooks struct {
-		Event []ent.Hook
+		Event, IntegrityCheck []ent.Hook
 	}
 	inters struct {
-		Event []ent.Interceptor
+		Event, IntegrityCheck []ent.Interceptor
 	}
 )

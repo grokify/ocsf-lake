@@ -23,6 +23,8 @@ var (
 		{Name: "schema_version", Type: field.TypeString, Default: "1.3.0"},
 		{Name: "payload", Type: field.TypeJSON},
 		{Name: "raw_data", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "integrity_status", Type: field.TypeString, Nullable: true},
+		{Name: "integrity_checked_at", Type: field.TypeTime, Nullable: true},
 	}
 	// EventsTable holds the schema information for the "events" table.
 	EventsTable = &schema.Table{
@@ -70,11 +72,49 @@ var (
 				Unique:  false,
 				Columns: []*schema.Column{EventsColumns[8]},
 			},
+			{
+				Name:    "event_integrity_status",
+				Unique:  false,
+				Columns: []*schema.Column{EventsColumns[13]},
+			},
+		},
+	}
+	// IntegrityChecksColumns holds the columns for the "integrity_checks" table.
+	IntegrityChecksColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString, Unique: true},
+		{Name: "kind", Type: field.TypeString},
+		{Name: "started_at", Type: field.TypeTime},
+		{Name: "finished_at", Type: field.TypeTime},
+		{Name: "checked", Type: field.TypeInt},
+		{Name: "verified", Type: field.TypeInt},
+		{Name: "unsigned", Type: field.TypeInt},
+		{Name: "failed", Type: field.TypeInt},
+		{Name: "checkpoint", Type: field.TypeTime, Nullable: true},
+		{Name: "report", Type: field.TypeJSON, Nullable: true},
+		{Name: "created_at", Type: field.TypeTime},
+	}
+	// IntegrityChecksTable holds the schema information for the "integrity_checks" table.
+	IntegrityChecksTable = &schema.Table{
+		Name:       "integrity_checks",
+		Columns:    IntegrityChecksColumns,
+		PrimaryKey: []*schema.Column{IntegrityChecksColumns[0]},
+		Indexes: []*schema.Index{
+			{
+				Name:    "integritycheck_kind_finished_at",
+				Unique:  false,
+				Columns: []*schema.Column{IntegrityChecksColumns[1], IntegrityChecksColumns[3]},
+			},
+			{
+				Name:    "integritycheck_finished_at",
+				Unique:  false,
+				Columns: []*schema.Column{IntegrityChecksColumns[3]},
+			},
 		},
 	}
 	// Tables holds all the tables in the schema.
 	Tables = []*schema.Table{
 		EventsTable,
+		IntegrityChecksTable,
 	}
 )
 

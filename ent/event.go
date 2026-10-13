@@ -42,8 +42,12 @@ type Event struct {
 	// Full OCSF event payload as JSON
 	Payload map[string]interface{} `json:"payload,omitempty"`
 	// Original raw event data before OCSF transformation
-	RawData      string `json:"raw_data,omitempty"`
-	selectValues sql.SelectValues
+	RawData string `json:"raw_data,omitempty"`
+	// Latest record-integrity status (verified, unsigned, signature_invalid, ...)
+	IntegrityStatus string `json:"integrity_status,omitempty"`
+	// When the record-integrity status was last computed
+	IntegrityCheckedAt *time.Time `json:"integrity_checked_at,omitempty"`
+	selectValues       sql.SelectValues
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -55,9 +59,9 @@ func (*Event) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case event.FieldClassUID, event.FieldCategoryUID, event.FieldActivityID, event.FieldTypeUID, event.FieldSeverityID, event.FieldStatusID, event.FieldTime:
 			values[i] = new(sql.NullInt64)
-		case event.FieldID, event.FieldSource, event.FieldSchemaVersion, event.FieldRawData:
+		case event.FieldID, event.FieldSource, event.FieldSchemaVersion, event.FieldRawData, event.FieldIntegrityStatus:
 			values[i] = new(sql.NullString)
-		case event.FieldIngestedAt:
+		case event.FieldIngestedAt, event.FieldIntegrityCheckedAt:
 			values[i] = new(sql.NullTime)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -154,6 +158,19 @@ func (_m *Event) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.RawData = value.String
 			}
+		case event.FieldIntegrityStatus:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field integrity_status", values[i])
+			} else if value.Valid {
+				_m.IntegrityStatus = value.String
+			}
+		case event.FieldIntegrityCheckedAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field integrity_checked_at", values[i])
+			} else if value.Valid {
+				_m.IntegrityCheckedAt = new(time.Time)
+				*_m.IntegrityCheckedAt = value.Time
+			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
 		}
@@ -225,6 +242,14 @@ func (_m *Event) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("raw_data=")
 	builder.WriteString(_m.RawData)
+	builder.WriteString(", ")
+	builder.WriteString("integrity_status=")
+	builder.WriteString(_m.IntegrityStatus)
+	builder.WriteString(", ")
+	if v := _m.IntegrityCheckedAt; v != nil {
+		builder.WriteString("integrity_checked_at=")
+		builder.WriteString(v.Format(time.ANSIC))
+	}
 	builder.WriteByte(')')
 	return builder.String()
 }

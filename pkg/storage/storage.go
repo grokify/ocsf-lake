@@ -4,6 +4,7 @@ package storage
 import (
 	"context"
 	"errors"
+	"time"
 
 	"github.com/grokify/ocsf-lake/pkg/ocsf"
 )
@@ -35,6 +36,17 @@ type Storage interface {
 	// Returns the number of deleted events.
 	Delete(ctx context.Context, q *Query) (int, error)
 
+	// SetEventIntegrity records the latest record-integrity status of one
+	// event (see the integrity package).
+	SetEventIntegrity(ctx context.Context, id, status string, checkedAt time.Time) error
+
+	// SaveIntegrityReport persists a record-integrity check run.
+	SaveIntegrityReport(ctx context.Context, rec *ocsf.IntegrityCheckRecord) error
+
+	// ListIntegrityReports returns persisted check runs, newest first,
+	// optionally filtered by kind ("" = all).
+	ListIntegrityReports(ctx context.Context, kind string, limit int) ([]*ocsf.IntegrityCheckRecord, error)
+
 	// Close closes the storage connection.
 	Close() error
 }
@@ -55,6 +67,14 @@ type Query struct {
 	// Time range filters (epoch milliseconds)
 	TimeFrom *int64
 	TimeTo   *int64
+
+	// IngestedFrom filters to events ingested strictly after the given
+	// time (used for incremental integrity checks).
+	IngestedFrom *time.Time
+
+	// IntegrityStatus filters by the recorded record-integrity status
+	// (e.g. "verified", "unsigned", "signature_invalid").
+	IntegrityStatus *string
 
 	// Pagination
 	Limit  int
@@ -125,6 +145,18 @@ func (qb *QueryBuilder) WithSource(source string) *QueryBuilder {
 func (qb *QueryBuilder) WithTimeRange(from, to int64) *QueryBuilder {
 	qb.query.TimeFrom = &from
 	qb.query.TimeTo = &to
+	return qb
+}
+
+// WithIngestedFrom filters to events ingested strictly after t.
+func (qb *QueryBuilder) WithIngestedFrom(t time.Time) *QueryBuilder {
+	qb.query.IngestedFrom = &t
+	return qb
+}
+
+// WithIntegrityStatus filters by recorded record-integrity status.
+func (qb *QueryBuilder) WithIntegrityStatus(status string) *QueryBuilder {
+	qb.query.IntegrityStatus = &status
 	return qb
 }
 

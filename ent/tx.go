@@ -14,6 +14,8 @@ type Tx struct {
 	config
 	// Event is the client for interacting with the Event builders.
 	Event *EventClient
+	// IntegrityCheck is the client for interacting with the IntegrityCheck builders.
+	IntegrityCheck *IntegrityCheckClient
 
 	// lazily loaded.
 	client     *Client
@@ -146,6 +148,7 @@ func (tx *Tx) Client() *Client {
 
 func (tx *Tx) init() {
 	tx.Event = NewEventClient(tx.config)
+	tx.IntegrityCheck = NewIntegrityCheckClient(tx.config)
 }
 
 // txDriver wraps the given dialect.Tx with a nop dialect.Driver implementation.

@@ -13,6 +13,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"github.com/grokify/ocsf-lake/ent/event"
+	"github.com/grokify/ocsf-lake/ent/integritycheck"
 )
 
 // ent aliases to avoid import conflicts in user's code.
@@ -73,7 +74,8 @@ var (
 func checkColumn(t, c string) error {
 	initCheck.Do(func() {
 		columnCheck = sql.NewColumnCheck(map[string]func(string) bool{
-			event.Table: event.ValidColumn,
+			event.Table:          event.ValidColumn,
+			integritycheck.Table: integritycheck.ValidColumn,
 		})
 	})
 	return columnCheck(t, c)

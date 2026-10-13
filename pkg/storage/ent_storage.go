@@ -10,6 +10,7 @@ import (
 	entsql "entgo.io/ent/dialect/sql"
 	"github.com/grokify/ocsf-lake/ent"
 	"github.com/grokify/ocsf-lake/ent/event"
+	"github.com/grokify/ocsf-lake/ent/integritycheck"
 	"github.com/grokify/ocsf-lake/pkg/ocsf"
 )
 
@@ -99,7 +100,9 @@ func (s *EntStorage) Insert(ctx context.Context, events ...*ocsf.StoredEvent) er
 			SetSource(e.Source).
 			SetSchemaVersion(e.SchemaVersion).
 			SetPayload(e.Payload).
-			SetNillableRawData(strPtr(e.RawData))
+			SetNillableRawData(strPtr(e.RawData)).
+			SetNillableIntegrityStatus(strPtr(e.IntegrityStatus)).
+			SetNillableIntegrityCheckedAt(e.IntegrityCheckedAt)
 	}
 
 	_, err := s.client.Event.CreateBulk(bulk...).Save(ctx)
@@ -266,6 +269,12 @@ func (s *EntStorage) buildQuery(q *Query) *ent.EventQuery {
 	if q.TimeTo != nil {
 		query = query.Where(event.TimeLTE(*q.TimeTo))
 	}
+	if q.IngestedFrom != nil {
+		query = query.Where(event.IngestedAtGT(*q.IngestedFrom))
+	}
+	if q.IntegrityStatus != nil {
+		query = query.Where(event.IntegrityStatus(*q.IntegrityStatus))
+	}
 
 	return query
 }
@@ -286,7 +295,79 @@ func entEventToStoredEvent(e *ent.Event) *ocsf.StoredEvent {
 		SchemaVersion: e.SchemaVersion,
 		Payload:       e.Payload,
 		RawData:       e.RawData,
+
+		IntegrityStatus:    e.IntegrityStatus,
+		IntegrityCheckedAt: e.IntegrityCheckedAt,
 	}
+}
+
+// SetEventIntegrity records the latest record-integrity status of one event.
+func (s *EntStorage) SetEventIntegrity(ctx context.Context, id, status string, checkedAt time.Time) error {
+	err := s.client.Event.UpdateOneID(id).
+		SetIntegrityStatus(status).
+		SetIntegrityCheckedAt(checkedAt).
+		Exec(ctx)
+	if ent.IsNotFound(err) {
+		return ErrNotFound
+	}
+	return err
+}
+
+// SaveIntegrityReport persists a record-integrity check run.
+func (s *EntStorage) SaveIntegrityReport(ctx context.Context, rec *ocsf.IntegrityCheckRecord) error {
+	create := s.client.IntegrityCheck.Create().
+		SetID(rec.ID).
+		SetKind(rec.Kind).
+		SetStartedAt(rec.StartedAt).
+		SetFinishedAt(rec.FinishedAt).
+		SetChecked(rec.Checked).
+		SetVerified(rec.Verified).
+		SetUnsigned(rec.Unsigned).
+		SetFailed(rec.Failed).
+		SetNillableCheckpoint(rec.Checkpoint)
+	if rec.Report != nil {
+		create = create.SetReport(rec.Report)
+	}
+	if err := create.Exec(ctx); err != nil {
+		if ent.IsConstraintError(err) {
+			return ErrDuplicateID
+		}
+		return fmt.Errorf("failed to save integrity report: %w", err)
+	}
+	return nil
+}
+
+// ListIntegrityReports returns persisted check runs, newest first.
+func (s *EntStorage) ListIntegrityReports(ctx context.Context, kind string, limit int) ([]*ocsf.IntegrityCheckRecord, error) {
+	q := s.client.IntegrityCheck.Query()
+	if kind != "" {
+		q = q.Where(integritycheck.Kind(kind))
+	}
+	q = q.Order(integritycheck.ByFinishedAt(entsql.OrderDesc()))
+	if limit > 0 {
+		q = q.Limit(limit)
+	}
+	rows, err := q.All(ctx)
+	if err != nil {
+		return nil, fmt.Errorf("failed to list integrity reports: %w", err)
+	}
+	out := make([]*ocsf.IntegrityCheckRecord, 0, len(rows))
+	for _, row := range rows {
+		out = append(out, &ocsf.IntegrityCheckRecord{
+			ID:         row.ID,
+			Kind:       row.Kind,
+			StartedAt:  row.StartedAt,
+			FinishedAt: row.FinishedAt,
+			Checked:    row.Checked,
+			Verified:   row.Verified,
+			Unsigned:   row.Unsigned,
+			Failed:     row.Failed,
+			Checkpoint: row.Checkpoint,
+			Report:     row.Report,
+			CreatedAt:  row.CreatedAt,
+		})
+	}
+	return out, nil
 }
 
 // Helper functions for optional fields

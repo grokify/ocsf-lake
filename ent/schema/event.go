@@ -68,6 +68,16 @@ func (Event) Fields() []ent.Field {
 		field.Text("raw_data").
 			Optional().
 			Comment("Original raw event data before OCSF transformation"),
+
+		// Record-integrity check state (optional; written by the integrity
+		// checker and by verify-on-ingest)
+		field.String("integrity_status").
+			Optional().
+			Comment("Latest record-integrity status (verified, unsigned, signature_invalid, ...)"),
+		field.Time("integrity_checked_at").
+			Optional().
+			Nillable().
+			Comment("When the record-integrity status was last computed"),
 	}
 }
 
@@ -91,6 +101,9 @@ func (Event) Indexes() []ent.Index {
 		// Time-range queries
 		index.Fields("time"),
 		index.Fields("ingested_at"),
+
+		// Integrity dashboards ("show unverified/failed events")
+		index.Fields("integrity_status"),
 	}
 }
 

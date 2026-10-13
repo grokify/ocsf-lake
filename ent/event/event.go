@@ -37,6 +37,10 @@ const (
 	FieldPayload = "payload"
 	// FieldRawData holds the string denoting the raw_data field in the database.
 	FieldRawData = "raw_data"
+	// FieldIntegrityStatus holds the string denoting the integrity_status field in the database.
+	FieldIntegrityStatus = "integrity_status"
+	// FieldIntegrityCheckedAt holds the string denoting the integrity_checked_at field in the database.
+	FieldIntegrityCheckedAt = "integrity_checked_at"
 	// Table holds the table name of the event in the database.
 	Table = "events"
 )
@@ -56,6 +60,8 @@ var Columns = []string{
 	FieldSchemaVersion,
 	FieldPayload,
 	FieldRawData,
+	FieldIntegrityStatus,
+	FieldIntegrityCheckedAt,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -150,4 +156,14 @@ func BySchemaVersion(opts ...sql.OrderTermOption) OrderOption {
 // ByRawData orders the results by the raw_data field.
 func ByRawData(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldRawData, opts...).ToFunc()
+}
+
+// ByIntegrityStatus orders the results by the integrity_status field.
+func ByIntegrityStatus(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldIntegrityStatus, opts...).ToFunc()
+}
+
+// ByIntegrityCheckedAt orders the results by the integrity_checked_at field.
+func ByIntegrityCheckedAt(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldIntegrityCheckedAt, opts...).ToFunc()
 }

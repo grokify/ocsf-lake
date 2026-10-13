@@ -6,6 +6,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
@@ -240,6 +241,46 @@ func (_u *EventUpdate) ClearRawData() *EventUpdate {
 	return _u
 }
 
+// SetIntegrityStatus sets the "integrity_status" field.
+func (_u *EventUpdate) SetIntegrityStatus(v string) *EventUpdate {
+	_u.mutation.SetIntegrityStatus(v)
+	return _u
+}
+
+// SetNillableIntegrityStatus sets the "integrity_status" field if the given value is not nil.
+func (_u *EventUpdate) SetNillableIntegrityStatus(v *string) *EventUpdate {
+	if v != nil {
+		_u.SetIntegrityStatus(*v)
+	}
+	return _u
+}
+
+// ClearIntegrityStatus clears the value of the "integrity_status" field.
+func (_u *EventUpdate) ClearIntegrityStatus() *EventUpdate {
+	_u.mutation.ClearIntegrityStatus()
+	return _u
+}
+
+// SetIntegrityCheckedAt sets the "integrity_checked_at" field.
+func (_u *EventUpdate) SetIntegrityCheckedAt(v time.Time) *EventUpdate {
+	_u.mutation.SetIntegrityCheckedAt(v)
+	return _u
+}
+
+// SetNillableIntegrityCheckedAt sets the "integrity_checked_at" field if the given value is not nil.
+func (_u *EventUpdate) SetNillableIntegrityCheckedAt(v *time.Time) *EventUpdate {
+	if v != nil {
+		_u.SetIntegrityCheckedAt(*v)
+	}
+	return _u
+}
+
+// ClearIntegrityCheckedAt clears the value of the "integrity_checked_at" field.
+func (_u *EventUpdate) ClearIntegrityCheckedAt() *EventUpdate {
+	_u.mutation.ClearIntegrityCheckedAt()
+	return _u
+}
+
 // Mutation returns the EventMutation object of the builder.
 func (_u *EventUpdate) Mutation() *EventMutation {
 	return _u.mutation
@@ -381,6 +422,18 @@ func (_u *EventUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if _u.mutation.RawDataCleared() {
 		_spec.ClearField(event.FieldRawData, field.TypeString)
+	}
+	if value, ok := _u.mutation.IntegrityStatus(); ok {
+		_spec.SetField(event.FieldIntegrityStatus, field.TypeString, value)
+	}
+	if _u.mutation.IntegrityStatusCleared() {
+		_spec.ClearField(event.FieldIntegrityStatus, field.TypeString)
+	}
+	if value, ok := _u.mutation.IntegrityCheckedAt(); ok {
+		_spec.SetField(event.FieldIntegrityCheckedAt, field.TypeTime, value)
+	}
+	if _u.mutation.IntegrityCheckedAtCleared() {
+		_spec.ClearField(event.FieldIntegrityCheckedAt, field.TypeTime)
 	}
 	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -615,6 +668,46 @@ func (_u *EventUpdateOne) ClearRawData() *EventUpdateOne {
 	return _u
 }
 
+// SetIntegrityStatus sets the "integrity_status" field.
+func (_u *EventUpdateOne) SetIntegrityStatus(v string) *EventUpdateOne {
+	_u.mutation.SetIntegrityStatus(v)
+	return _u
+}
+
+// SetNillableIntegrityStatus sets the "integrity_status" field if the given value is not nil.
+func (_u *EventUpdateOne) SetNillableIntegrityStatus(v *string) *EventUpdateOne {
+	if v != nil {
+		_u.SetIntegrityStatus(*v)
+	}
+	return _u
+}
+
+// ClearIntegrityStatus clears the value of the "integrity_status" field.
+func (_u *EventUpdateOne) ClearIntegrityStatus() *EventUpdateOne {
+	_u.mutation.ClearIntegrityStatus()
+	return _u
+}
+
+// SetIntegrityCheckedAt sets the "integrity_checked_at" field.
+func (_u *EventUpdateOne) SetIntegrityCheckedAt(v time.Time) *EventUpdateOne {
+	_u.mutation.SetIntegrityCheckedAt(v)
+	return _u
+}
+
+// SetNillableIntegrityCheckedAt sets the "integrity_checked_at" field if the given value is not nil.
+func (_u *EventUpdateOne) SetNillableIntegrityCheckedAt(v *time.Time) *EventUpdateOne {
+	if v != nil {
+		_u.SetIntegrityCheckedAt(*v)
+	}
+	return _u
+}
+
+// ClearIntegrityCheckedAt clears the value of the "integrity_checked_at" field.
+func (_u *EventUpdateOne) ClearIntegrityCheckedAt() *EventUpdateOne {
+	_u.mutation.ClearIntegrityCheckedAt()
+	return _u
+}
+
 // Mutation returns the EventMutation object of the builder.
 func (_u *EventUpdateOne) Mutation() *EventMutation {
 	return _u.mutation
@@ -786,6 +879,18 @@ func (_u *EventUpdateOne) sqlSave(ctx context.Context) (_node *Event, err error)
 	}
 	if _u.mutation.RawDataCleared() {
 		_spec.ClearField(event.FieldRawData, field.TypeString)
+	}
+	if value, ok := _u.mutation.IntegrityStatus(); ok {
+		_spec.SetField(event.FieldIntegrityStatus, field.TypeString, value)
+	}
+	if _u.mutation.IntegrityStatusCleared() {
+		_spec.ClearField(event.FieldIntegrityStatus, field.TypeString)
+	}
+	if value, ok := _u.mutation.IntegrityCheckedAt(); ok {
+		_spec.SetField(event.FieldIntegrityCheckedAt, field.TypeTime, value)
+	}
+	if _u.mutation.IntegrityCheckedAtCleared() {
+		_spec.ClearField(event.FieldIntegrityCheckedAt, field.TypeTime)
 	}
 	_node = &Event{config: _u.config}
 	_spec.Assign = _node.assignValues

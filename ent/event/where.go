@@ -119,6 +119,16 @@ func RawData(v string) predicate.Event {
 	return predicate.Event(sql.FieldEQ(FieldRawData, v))
 }
 
+// IntegrityStatus applies equality check predicate on the "integrity_status" field. It's identical to IntegrityStatusEQ.
+func IntegrityStatus(v string) predicate.Event {
+	return predicate.Event(sql.FieldEQ(FieldIntegrityStatus, v))
+}
+
+// IntegrityCheckedAt applies equality check predicate on the "integrity_checked_at" field. It's identical to IntegrityCheckedAtEQ.
+func IntegrityCheckedAt(v time.Time) predicate.Event {
+	return predicate.Event(sql.FieldEQ(FieldIntegrityCheckedAt, v))
+}
+
 // ClassUIDEQ applies the EQ predicate on the "class_uid" field.
 func ClassUIDEQ(v int) predicate.Event {
 	return predicate.Event(sql.FieldEQ(FieldClassUID, v))
@@ -662,6 +672,131 @@ func RawDataEqualFold(v string) predicate.Event {
 // RawDataContainsFold applies the ContainsFold predicate on the "raw_data" field.
 func RawDataContainsFold(v string) predicate.Event {
 	return predicate.Event(sql.FieldContainsFold(FieldRawData, v))
+}
+
+// IntegrityStatusEQ applies the EQ predicate on the "integrity_status" field.
+func IntegrityStatusEQ(v string) predicate.Event {
+	return predicate.Event(sql.FieldEQ(FieldIntegrityStatus, v))
+}
+
+// IntegrityStatusNEQ applies the NEQ predicate on the "integrity_status" field.
+func IntegrityStatusNEQ(v string) predicate.Event {
+	return predicate.Event(sql.FieldNEQ(FieldIntegrityStatus, v))
+}
+
+// IntegrityStatusIn applies the In predicate on the "integrity_status" field.
+func IntegrityStatusIn(vs ...string) predicate.Event {
+	return predicate.Event(sql.FieldIn(FieldIntegrityStatus, vs...))
+}
+
+// IntegrityStatusNotIn applies the NotIn predicate on the "integrity_status" field.
+func IntegrityStatusNotIn(vs ...string) predicate.Event {
+	return predicate.Event(sql.FieldNotIn(FieldIntegrityStatus, vs...))
+}
+
+// IntegrityStatusGT applies the GT predicate on the "integrity_status" field.
+func IntegrityStatusGT(v string) predicate.Event {
+	return predicate.Event(sql.FieldGT(FieldIntegrityStatus, v))
+}
+
+// IntegrityStatusGTE applies the GTE predicate on the "integrity_status" field.
+func IntegrityStatusGTE(v string) predicate.Event {
+	return predicate.Event(sql.FieldGTE(FieldIntegrityStatus, v))
+}
+
+// IntegrityStatusLT applies the LT predicate on the "integrity_status" field.
+func IntegrityStatusLT(v string) predicate.Event {
+	return predicate.Event(sql.FieldLT(FieldIntegrityStatus, v))
+}
+
+// IntegrityStatusLTE applies the LTE predicate on the "integrity_status" field.
+func IntegrityStatusLTE(v string) predicate.Event {
+	return predicate.Event(sql.FieldLTE(FieldIntegrityStatus, v))
+}
+
+// IntegrityStatusContains applies the Contains predicate on the "integrity_status" field.
+func IntegrityStatusContains(v string) predicate.Event {
+	return predicate.Event(sql.FieldContains(FieldIntegrityStatus, v))
+}
+
+// IntegrityStatusHasPrefix applies the HasPrefix predicate on the "integrity_status" field.
+func IntegrityStatusHasPrefix(v string) predicate.Event {
+	return predicate.Event(sql.FieldHasPrefix(FieldIntegrityStatus, v))
+}
+
+// IntegrityStatusHasSuffix applies the HasSuffix predicate on the "integrity_status" field.
+func IntegrityStatusHasSuffix(v string) predicate.Event {
+	return predicate.Event(sql.FieldHasSuffix(FieldIntegrityStatus, v))
+}
+
+// IntegrityStatusIsNil applies the IsNil predicate on the "integrity_status" field.
+func IntegrityStatusIsNil() predicate.Event {
+	return predicate.Event(sql.FieldIsNull(FieldIntegrityStatus))
+}
+
+// IntegrityStatusNotNil applies the NotNil predicate on the "integrity_status" field.
+func IntegrityStatusNotNil() predicate.Event {
+	return predicate.Event(sql.FieldNotNull(FieldIntegrityStatus))
+}
+
+// IntegrityStatusEqualFold applies the EqualFold predicate on the "integrity_status" field.
+func IntegrityStatusEqualFold(v string) predicate.Event {
+	return predicate.Event(sql.FieldEqualFold(FieldIntegrityStatus, v))
+}
+
+// IntegrityStatusContainsFold applies the ContainsFold predicate on the "integrity_status" field.
+func IntegrityStatusContainsFold(v string) predicate.Event {
+	return predicate.Event(sql.FieldContainsFold(FieldIntegrityStatus, v))
+}
+
+// IntegrityCheckedAtEQ applies the EQ predicate on the "integrity_checked_at" field.
+func IntegrityCheckedAtEQ(v time.Time) predicate.Event {
+	return predicate.Event(sql.FieldEQ(FieldIntegrityCheckedAt, v))
+}
+
+// IntegrityCheckedAtNEQ applies the NEQ predicate on the "integrity_checked_at" field.
+func IntegrityCheckedAtNEQ(v time.Time) predicate.Event {
+	return predicate.Event(sql.FieldNEQ(FieldIntegrityCheckedAt, v))
+}
+
+// IntegrityCheckedAtIn applies the In predicate on the "integrity_checked_at" field.
+func IntegrityCheckedAtIn(vs ...time.Time) predicate.Event {
+	return predicate.Event(sql.FieldIn(FieldIntegrityCheckedAt, vs...))
+}
+
+// IntegrityCheckedAtNotIn applies the NotIn predicate on the "integrity_checked_at" field.
+func IntegrityCheckedAtNotIn(vs ...time.Time) predicate.Event {
+	return predicate.Event(sql.FieldNotIn(FieldIntegrityCheckedAt, vs...))
+}
+
+// IntegrityCheckedAtGT applies the GT predicate on the "integrity_checked_at" field.
+func IntegrityCheckedAtGT(v time.Time) predicate.Event {
+	return predicate.Event(sql.FieldGT(FieldIntegrityCheckedAt, v))
+}
+
+// IntegrityCheckedAtGTE applies the GTE predicate on the "integrity_checked_at" field.
+func IntegrityCheckedAtGTE(v time.Time) predicate.Event {
+	return predicate.Event(sql.FieldGTE(FieldIntegrityCheckedAt, v))
+}
+
+// IntegrityCheckedAtLT applies the LT predicate on the "integrity_checked_at" field.
+func IntegrityCheckedAtLT(v time.Time) predicate.Event {
+	return predicate.Event(sql.FieldLT(FieldIntegrityCheckedAt, v))
+}
+
+// IntegrityCheckedAtLTE applies the LTE predicate on the "integrity_checked_at" field.
+func IntegrityCheckedAtLTE(v time.Time) predicate.Event {
+	return predicate.Event(sql.FieldLTE(FieldIntegrityCheckedAt, v))
+}
+
+// IntegrityCheckedAtIsNil applies the IsNil predicate on the "integrity_checked_at" field.
+func IntegrityCheckedAtIsNil() predicate.Event {
+	return predicate.Event(sql.FieldIsNull(FieldIntegrityCheckedAt))
+}
+
+// IntegrityCheckedAtNotNil applies the NotNil predicate on the "integrity_checked_at" field.
+func IntegrityCheckedAtNotNil() predicate.Event {
+	return predicate.Event(sql.FieldNotNull(FieldIntegrityCheckedAt))
 }
 
 // And groups predicates with the AND operator between them.

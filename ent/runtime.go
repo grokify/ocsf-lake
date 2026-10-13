@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/grokify/ocsf-lake/ent/event"
+	"github.com/grokify/ocsf-lake/ent/integritycheck"
 	"github.com/grokify/ocsf-lake/ent/schema"
 )
 
@@ -51,4 +52,26 @@ func init() {
 	eventDescSchemaVersion := eventFields[10].Descriptor()
 	// event.DefaultSchemaVersion holds the default value on creation for the schema_version field.
 	event.DefaultSchemaVersion = eventDescSchemaVersion.Default.(string)
+	integritycheckFields := schema.IntegrityCheck{}.Fields()
+	_ = integritycheckFields
+	// integritycheckDescChecked is the schema descriptor for checked field.
+	integritycheckDescChecked := integritycheckFields[4].Descriptor()
+	// integritycheck.CheckedValidator is a validator for the "checked" field. It is called by the builders before save.
+	integritycheck.CheckedValidator = integritycheckDescChecked.Validators[0].(func(int) error)
+	// integritycheckDescVerified is the schema descriptor for verified field.
+	integritycheckDescVerified := integritycheckFields[5].Descriptor()
+	// integritycheck.VerifiedValidator is a validator for the "verified" field. It is called by the builders before save.
+	integritycheck.VerifiedValidator = integritycheckDescVerified.Validators[0].(func(int) error)
+	// integritycheckDescUnsigned is the schema descriptor for unsigned field.
+	integritycheckDescUnsigned := integritycheckFields[6].Descriptor()
+	// integritycheck.UnsignedValidator is a validator for the "unsigned" field. It is called by the builders before save.
+	integritycheck.UnsignedValidator = integritycheckDescUnsigned.Validators[0].(func(int) error)
+	// integritycheckDescFailed is the schema descriptor for failed field.
+	integritycheckDescFailed := integritycheckFields[7].Descriptor()
+	// integritycheck.FailedValidator is a validator for the "failed" field. It is called by the builders before save.
+	integritycheck.FailedValidator = integritycheckDescFailed.Validators[0].(func(int) error)
+	// integritycheckDescCreatedAt is the schema descriptor for created_at field.
+	integritycheckDescCreatedAt := integritycheckFields[10].Descriptor()
+	// integritycheck.DefaultCreatedAt holds the default value on creation for the created_at field.
+	integritycheck.DefaultCreatedAt = integritycheckDescCreatedAt.Default.(func() time.Time)
 }

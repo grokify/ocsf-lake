@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/grokify/ocsf-lake/ent/event"
+	"github.com/grokify/ocsf-lake/ent/integritycheck"
 	"github.com/grokify/ocsf-lake/ent/predicate"
 )
 
@@ -24,38 +25,41 @@ const (
 	OpUpdateOne = ent.OpUpdateOne
 
 	// Node types.
-	TypeEvent = "Event"
+	TypeEvent          = "Event"
+	TypeIntegrityCheck = "IntegrityCheck"
 )
 
 // EventMutation represents an operation that mutates the Event nodes in the graph.
 type EventMutation struct {
 	config
-	op              Op
-	typ             string
-	id              *string
-	class_uid       *int
-	addclass_uid    *int
-	category_uid    *int
-	addcategory_uid *int
-	activity_id     *int
-	addactivity_id  *int
-	type_uid        *int
-	addtype_uid     *int
-	severity_id     *int
-	addseverity_id  *int
-	status_id       *int
-	addstatus_id    *int
-	time            *int64
-	addtime         *int64
-	ingested_at     *time.Time
-	source          *string
-	schema_version  *string
-	payload         *map[string]interface{}
-	raw_data        *string
-	clearedFields   map[string]struct{}
-	done            bool
-	oldValue        func(context.Context) (*Event, error)
-	predicates      []predicate.Event
+	op                   Op
+	typ                  string
+	id                   *string
+	class_uid            *int
+	addclass_uid         *int
+	category_uid         *int
+	addcategory_uid      *int
+	activity_id          *int
+	addactivity_id       *int
+	type_uid             *int
+	addtype_uid          *int
+	severity_id          *int
+	addseverity_id       *int
+	status_id            *int
+	addstatus_id         *int
+	time                 *int64
+	addtime              *int64
+	ingested_at          *time.Time
+	source               *string
+	schema_version       *string
+	payload              *map[string]interface{}
+	raw_data             *string
+	integrity_status     *string
+	integrity_checked_at *time.Time
+	clearedFields        map[string]struct{}
+	done                 bool
+	oldValue             func(context.Context) (*Event, error)
+	predicates           []predicate.Event
 }
 
 var _ ent.Mutation = (*EventMutation)(nil)
@@ -775,6 +779,104 @@ func (m *EventMutation) ResetRawData() {
 	delete(m.clearedFields, event.FieldRawData)
 }
 
+// SetIntegrityStatus sets the "integrity_status" field.
+func (m *EventMutation) SetIntegrityStatus(s string) {
+	m.integrity_status = &s
+}
+
+// IntegrityStatus returns the value of the "integrity_status" field in the mutation.
+func (m *EventMutation) IntegrityStatus() (r string, exists bool) {
+	v := m.integrity_status
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldIntegrityStatus returns the old "integrity_status" field's value of the Event entity.
+// If the Event object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *EventMutation) OldIntegrityStatus(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldIntegrityStatus is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldIntegrityStatus requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldIntegrityStatus: %w", err)
+	}
+	return oldValue.IntegrityStatus, nil
+}
+
+// ClearIntegrityStatus clears the value of the "integrity_status" field.
+func (m *EventMutation) ClearIntegrityStatus() {
+	m.integrity_status = nil
+	m.clearedFields[event.FieldIntegrityStatus] = struct{}{}
+}
+
+// IntegrityStatusCleared returns if the "integrity_status" field was cleared in this mutation.
+func (m *EventMutation) IntegrityStatusCleared() bool {
+	_, ok := m.clearedFields[event.FieldIntegrityStatus]
+	return ok
+}
+
+// ResetIntegrityStatus resets all changes to the "integrity_status" field.
+func (m *EventMutation) ResetIntegrityStatus() {
+	m.integrity_status = nil
+	delete(m.clearedFields, event.FieldIntegrityStatus)
+}
+
+// SetIntegrityCheckedAt sets the "integrity_checked_at" field.
+func (m *EventMutation) SetIntegrityCheckedAt(t time.Time) {
+	m.integrity_checked_at = &t
+}
+
+// IntegrityCheckedAt returns the value of the "integrity_checked_at" field in the mutation.
+func (m *EventMutation) IntegrityCheckedAt() (r time.Time, exists bool) {
+	v := m.integrity_checked_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldIntegrityCheckedAt returns the old "integrity_checked_at" field's value of the Event entity.
+// If the Event object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *EventMutation) OldIntegrityCheckedAt(ctx context.Context) (v *time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldIntegrityCheckedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldIntegrityCheckedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldIntegrityCheckedAt: %w", err)
+	}
+	return oldValue.IntegrityCheckedAt, nil
+}
+
+// ClearIntegrityCheckedAt clears the value of the "integrity_checked_at" field.
+func (m *EventMutation) ClearIntegrityCheckedAt() {
+	m.integrity_checked_at = nil
+	m.clearedFields[event.FieldIntegrityCheckedAt] = struct{}{}
+}
+
+// IntegrityCheckedAtCleared returns if the "integrity_checked_at" field was cleared in this mutation.
+func (m *EventMutation) IntegrityCheckedAtCleared() bool {
+	_, ok := m.clearedFields[event.FieldIntegrityCheckedAt]
+	return ok
+}
+
+// ResetIntegrityCheckedAt resets all changes to the "integrity_checked_at" field.
+func (m *EventMutation) ResetIntegrityCheckedAt() {
+	m.integrity_checked_at = nil
+	delete(m.clearedFields, event.FieldIntegrityCheckedAt)
+}
+
 // Where appends a list predicates to the EventMutation builder.
 func (m *EventMutation) Where(ps ...predicate.Event) {
 	m.predicates = append(m.predicates, ps...)
@@ -809,7 +911,7 @@ func (m *EventMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *EventMutation) Fields() []string {
-	fields := make([]string, 0, 12)
+	fields := make([]string, 0, 14)
 	if m.class_uid != nil {
 		fields = append(fields, event.FieldClassUID)
 	}
@@ -846,6 +948,12 @@ func (m *EventMutation) Fields() []string {
 	if m.raw_data != nil {
 		fields = append(fields, event.FieldRawData)
 	}
+	if m.integrity_status != nil {
+		fields = append(fields, event.FieldIntegrityStatus)
+	}
+	if m.integrity_checked_at != nil {
+		fields = append(fields, event.FieldIntegrityCheckedAt)
+	}
 	return fields
 }
 
@@ -878,6 +986,10 @@ func (m *EventMutation) Field(name string) (ent.Value, bool) {
 		return m.Payload()
 	case event.FieldRawData:
 		return m.RawData()
+	case event.FieldIntegrityStatus:
+		return m.IntegrityStatus()
+	case event.FieldIntegrityCheckedAt:
+		return m.IntegrityCheckedAt()
 	}
 	return nil, false
 }
@@ -911,6 +1023,10 @@ func (m *EventMutation) OldField(ctx context.Context, name string) (ent.Value, e
 		return m.OldPayload(ctx)
 	case event.FieldRawData:
 		return m.OldRawData(ctx)
+	case event.FieldIntegrityStatus:
+		return m.OldIntegrityStatus(ctx)
+	case event.FieldIntegrityCheckedAt:
+		return m.OldIntegrityCheckedAt(ctx)
 	}
 	return nil, fmt.Errorf("unknown Event field %s", name)
 }
@@ -1003,6 +1119,20 @@ func (m *EventMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetRawData(v)
+		return nil
+	case event.FieldIntegrityStatus:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetIntegrityStatus(v)
+		return nil
+	case event.FieldIntegrityCheckedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetIntegrityCheckedAt(v)
 		return nil
 	}
 	return fmt.Errorf("unknown Event field %s", name)
@@ -1130,6 +1260,12 @@ func (m *EventMutation) ClearedFields() []string {
 	if m.FieldCleared(event.FieldRawData) {
 		fields = append(fields, event.FieldRawData)
 	}
+	if m.FieldCleared(event.FieldIntegrityStatus) {
+		fields = append(fields, event.FieldIntegrityStatus)
+	}
+	if m.FieldCleared(event.FieldIntegrityCheckedAt) {
+		fields = append(fields, event.FieldIntegrityCheckedAt)
+	}
 	return fields
 }
 
@@ -1152,6 +1288,12 @@ func (m *EventMutation) ClearField(name string) error {
 		return nil
 	case event.FieldRawData:
 		m.ClearRawData()
+		return nil
+	case event.FieldIntegrityStatus:
+		m.ClearIntegrityStatus()
+		return nil
+	case event.FieldIntegrityCheckedAt:
+		m.ClearIntegrityCheckedAt()
 		return nil
 	}
 	return fmt.Errorf("unknown Event nullable field %s", name)
@@ -1196,6 +1338,12 @@ func (m *EventMutation) ResetField(name string) error {
 		return nil
 	case event.FieldRawData:
 		m.ResetRawData()
+		return nil
+	case event.FieldIntegrityStatus:
+		m.ResetIntegrityStatus()
+		return nil
+	case event.FieldIntegrityCheckedAt:
+		m.ResetIntegrityCheckedAt()
 		return nil
 	}
 	return fmt.Errorf("unknown Event field %s", name)
@@ -1247,4 +1395,998 @@ func (m *EventMutation) ClearEdge(name string) error {
 // It returns an error if the edge is not defined in the schema.
 func (m *EventMutation) ResetEdge(name string) error {
 	return fmt.Errorf("unknown Event edge %s", name)
+}
+
+// IntegrityCheckMutation represents an operation that mutates the IntegrityCheck nodes in the graph.
+type IntegrityCheckMutation struct {
+	config
+	op            Op
+	typ           string
+	id            *string
+	kind          *string
+	started_at    *time.Time
+	finished_at   *time.Time
+	checked       *int
+	addchecked    *int
+	verified      *int
+	addverified   *int
+	unsigned      *int
+	addunsigned   *int
+	failed        *int
+	addfailed     *int
+	checkpoint    *time.Time
+	report        *map[string]interface{}
+	created_at    *time.Time
+	clearedFields map[string]struct{}
+	done          bool
+	oldValue      func(context.Context) (*IntegrityCheck, error)
+	predicates    []predicate.IntegrityCheck
+}
+
+var _ ent.Mutation = (*IntegrityCheckMutation)(nil)
+
+// integritycheckOption allows management of the mutation configuration using functional options.
+type integritycheckOption func(*IntegrityCheckMutation)
+
+// newIntegrityCheckMutation creates new mutation for the IntegrityCheck entity.
+func newIntegrityCheckMutation(c config, op Op, opts ...integritycheckOption) *IntegrityCheckMutation {
+	m := &IntegrityCheckMutation{
+		config:        c,
+		op:            op,
+		typ:           TypeIntegrityCheck,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withIntegrityCheckID sets the ID field of the mutation.
+func withIntegrityCheckID(id string) integritycheckOption {
+	return func(m *IntegrityCheckMutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *IntegrityCheck
+		)
+		m.oldValue = func(ctx context.Context) (*IntegrityCheck, error) {
+			once.Do(func() {
+				if m.done {
+					err = errors.New("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().IntegrityCheck.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withIntegrityCheck sets the old IntegrityCheck of the mutation.
+func withIntegrityCheck(node *IntegrityCheck) integritycheckOption {
+	return func(m *IntegrityCheckMutation) {
+		m.oldValue = func(context.Context) (*IntegrityCheck, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m IntegrityCheckMutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m IntegrityCheckMutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, errors.New("ent: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of IntegrityCheck entities.
+func (m *IntegrityCheckMutation) SetID(id string) {
+	m.id = &id
+}
+
+// ID returns the ID value in the mutation. Note that the ID is only available
+// if it was provided to the builder or after it was returned from the database.
+func (m *IntegrityCheckMutation) ID() (id string, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// IDs queries the database and returns the entity ids that match the mutation's predicate.
+// That means, if the mutation is applied within a transaction with an isolation level such
+// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
+// or updated by the mutation.
+func (m *IntegrityCheckMutation) IDs(ctx context.Context) ([]string, error) {
+	switch {
+	case m.op.Is(OpUpdateOne | OpDeleteOne):
+		id, exists := m.ID()
+		if exists {
+			return []string{id}, nil
+		}
+		fallthrough
+	case m.op.Is(OpUpdate | OpDelete):
+		return m.Client().IntegrityCheck.Query().Where(m.predicates...).IDs(ctx)
+	default:
+		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
+	}
+}
+
+// SetKind sets the "kind" field.
+func (m *IntegrityCheckMutation) SetKind(s string) {
+	m.kind = &s
+}
+
+// Kind returns the value of the "kind" field in the mutation.
+func (m *IntegrityCheckMutation) Kind() (r string, exists bool) {
+	v := m.kind
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldKind returns the old "kind" field's value of the IntegrityCheck entity.
+// If the IntegrityCheck object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *IntegrityCheckMutation) OldKind(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldKind is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldKind requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldKind: %w", err)
+	}
+	return oldValue.Kind, nil
+}
+
+// ResetKind resets all changes to the "kind" field.
+func (m *IntegrityCheckMutation) ResetKind() {
+	m.kind = nil
+}
+
+// SetStartedAt sets the "started_at" field.
+func (m *IntegrityCheckMutation) SetStartedAt(t time.Time) {
+	m.started_at = &t
+}
+
+// StartedAt returns the value of the "started_at" field in the mutation.
+func (m *IntegrityCheckMutation) StartedAt() (r time.Time, exists bool) {
+	v := m.started_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldStartedAt returns the old "started_at" field's value of the IntegrityCheck entity.
+// If the IntegrityCheck object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *IntegrityCheckMutation) OldStartedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldStartedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldStartedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldStartedAt: %w", err)
+	}
+	return oldValue.StartedAt, nil
+}
+
+// ResetStartedAt resets all changes to the "started_at" field.
+func (m *IntegrityCheckMutation) ResetStartedAt() {
+	m.started_at = nil
+}
+
+// SetFinishedAt sets the "finished_at" field.
+func (m *IntegrityCheckMutation) SetFinishedAt(t time.Time) {
+	m.finished_at = &t
+}
+
+// FinishedAt returns the value of the "finished_at" field in the mutation.
+func (m *IntegrityCheckMutation) FinishedAt() (r time.Time, exists bool) {
+	v := m.finished_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldFinishedAt returns the old "finished_at" field's value of the IntegrityCheck entity.
+// If the IntegrityCheck object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *IntegrityCheckMutation) OldFinishedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldFinishedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldFinishedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldFinishedAt: %w", err)
+	}
+	return oldValue.FinishedAt, nil
+}
+
+// ResetFinishedAt resets all changes to the "finished_at" field.
+func (m *IntegrityCheckMutation) ResetFinishedAt() {
+	m.finished_at = nil
+}
+
+// SetChecked sets the "checked" field.
+func (m *IntegrityCheckMutation) SetChecked(i int) {
+	m.checked = &i
+	m.addchecked = nil
+}
+
+// Checked returns the value of the "checked" field in the mutation.
+func (m *IntegrityCheckMutation) Checked() (r int, exists bool) {
+	v := m.checked
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldChecked returns the old "checked" field's value of the IntegrityCheck entity.
+// If the IntegrityCheck object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *IntegrityCheckMutation) OldChecked(ctx context.Context) (v int, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldChecked is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldChecked requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldChecked: %w", err)
+	}
+	return oldValue.Checked, nil
+}
+
+// AddChecked adds i to the "checked" field.
+func (m *IntegrityCheckMutation) AddChecked(i int) {
+	if m.addchecked != nil {
+		*m.addchecked += i
+	} else {
+		m.addchecked = &i
+	}
+}
+
+// AddedChecked returns the value that was added to the "checked" field in this mutation.
+func (m *IntegrityCheckMutation) AddedChecked() (r int, exists bool) {
+	v := m.addchecked
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetChecked resets all changes to the "checked" field.
+func (m *IntegrityCheckMutation) ResetChecked() {
+	m.checked = nil
+	m.addchecked = nil
+}
+
+// SetVerified sets the "verified" field.
+func (m *IntegrityCheckMutation) SetVerified(i int) {
+	m.verified = &i
+	m.addverified = nil
+}
+
+// Verified returns the value of the "verified" field in the mutation.
+func (m *IntegrityCheckMutation) Verified() (r int, exists bool) {
+	v := m.verified
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldVerified returns the old "verified" field's value of the IntegrityCheck entity.
+// If the IntegrityCheck object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *IntegrityCheckMutation) OldVerified(ctx context.Context) (v int, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldVerified is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldVerified requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldVerified: %w", err)
+	}
+	return oldValue.Verified, nil
+}
+
+// AddVerified adds i to the "verified" field.
+func (m *IntegrityCheckMutation) AddVerified(i int) {
+	if m.addverified != nil {
+		*m.addverified += i
+	} else {
+		m.addverified = &i
+	}
+}
+
+// AddedVerified returns the value that was added to the "verified" field in this mutation.
+func (m *IntegrityCheckMutation) AddedVerified() (r int, exists bool) {
+	v := m.addverified
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetVerified resets all changes to the "verified" field.
+func (m *IntegrityCheckMutation) ResetVerified() {
+	m.verified = nil
+	m.addverified = nil
+}
+
+// SetUnsigned sets the "unsigned" field.
+func (m *IntegrityCheckMutation) SetUnsigned(i int) {
+	m.unsigned = &i
+	m.addunsigned = nil
+}
+
+// Unsigned returns the value of the "unsigned" field in the mutation.
+func (m *IntegrityCheckMutation) Unsigned() (r int, exists bool) {
+	v := m.unsigned
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUnsigned returns the old "unsigned" field's value of the IntegrityCheck entity.
+// If the IntegrityCheck object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *IntegrityCheckMutation) OldUnsigned(ctx context.Context) (v int, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUnsigned is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUnsigned requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUnsigned: %w", err)
+	}
+	return oldValue.Unsigned, nil
+}
+
+// AddUnsigned adds i to the "unsigned" field.
+func (m *IntegrityCheckMutation) AddUnsigned(i int) {
+	if m.addunsigned != nil {
+		*m.addunsigned += i
+	} else {
+		m.addunsigned = &i
+	}
+}
+
+// AddedUnsigned returns the value that was added to the "unsigned" field in this mutation.
+func (m *IntegrityCheckMutation) AddedUnsigned() (r int, exists bool) {
+	v := m.addunsigned
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetUnsigned resets all changes to the "unsigned" field.
+func (m *IntegrityCheckMutation) ResetUnsigned() {
+	m.unsigned = nil
+	m.addunsigned = nil
+}
+
+// SetFailed sets the "failed" field.
+func (m *IntegrityCheckMutation) SetFailed(i int) {
+	m.failed = &i
+	m.addfailed = nil
+}
+
+// Failed returns the value of the "failed" field in the mutation.
+func (m *IntegrityCheckMutation) Failed() (r int, exists bool) {
+	v := m.failed
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldFailed returns the old "failed" field's value of the IntegrityCheck entity.
+// If the IntegrityCheck object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *IntegrityCheckMutation) OldFailed(ctx context.Context) (v int, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldFailed is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldFailed requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldFailed: %w", err)
+	}
+	return oldValue.Failed, nil
+}
+
+// AddFailed adds i to the "failed" field.
+func (m *IntegrityCheckMutation) AddFailed(i int) {
+	if m.addfailed != nil {
+		*m.addfailed += i
+	} else {
+		m.addfailed = &i
+	}
+}
+
+// AddedFailed returns the value that was added to the "failed" field in this mutation.
+func (m *IntegrityCheckMutation) AddedFailed() (r int, exists bool) {
+	v := m.addfailed
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetFailed resets all changes to the "failed" field.
+func (m *IntegrityCheckMutation) ResetFailed() {
+	m.failed = nil
+	m.addfailed = nil
+}
+
+// SetCheckpoint sets the "checkpoint" field.
+func (m *IntegrityCheckMutation) SetCheckpoint(t time.Time) {
+	m.checkpoint = &t
+}
+
+// Checkpoint returns the value of the "checkpoint" field in the mutation.
+func (m *IntegrityCheckMutation) Checkpoint() (r time.Time, exists bool) {
+	v := m.checkpoint
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCheckpoint returns the old "checkpoint" field's value of the IntegrityCheck entity.
+// If the IntegrityCheck object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *IntegrityCheckMutation) OldCheckpoint(ctx context.Context) (v *time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCheckpoint is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCheckpoint requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCheckpoint: %w", err)
+	}
+	return oldValue.Checkpoint, nil
+}
+
+// ClearCheckpoint clears the value of the "checkpoint" field.
+func (m *IntegrityCheckMutation) ClearCheckpoint() {
+	m.checkpoint = nil
+	m.clearedFields[integritycheck.FieldCheckpoint] = struct{}{}
+}
+
+// CheckpointCleared returns if the "checkpoint" field was cleared in this mutation.
+func (m *IntegrityCheckMutation) CheckpointCleared() bool {
+	_, ok := m.clearedFields[integritycheck.FieldCheckpoint]
+	return ok
+}
+
+// ResetCheckpoint resets all changes to the "checkpoint" field.
+func (m *IntegrityCheckMutation) ResetCheckpoint() {
+	m.checkpoint = nil
+	delete(m.clearedFields, integritycheck.FieldCheckpoint)
+}
+
+// SetReport sets the "report" field.
+func (m *IntegrityCheckMutation) SetReport(value map[string]interface{}) {
+	m.report = &value
+}
+
+// Report returns the value of the "report" field in the mutation.
+func (m *IntegrityCheckMutation) Report() (r map[string]interface{}, exists bool) {
+	v := m.report
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldReport returns the old "report" field's value of the IntegrityCheck entity.
+// If the IntegrityCheck object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *IntegrityCheckMutation) OldReport(ctx context.Context) (v map[string]interface{}, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldReport is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldReport requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldReport: %w", err)
+	}
+	return oldValue.Report, nil
+}
+
+// ClearReport clears the value of the "report" field.
+func (m *IntegrityCheckMutation) ClearReport() {
+	m.report = nil
+	m.clearedFields[integritycheck.FieldReport] = struct{}{}
+}
+
+// ReportCleared returns if the "report" field was cleared in this mutation.
+func (m *IntegrityCheckMutation) ReportCleared() bool {
+	_, ok := m.clearedFields[integritycheck.FieldReport]
+	return ok
+}
+
+// ResetReport resets all changes to the "report" field.
+func (m *IntegrityCheckMutation) ResetReport() {
+	m.report = nil
+	delete(m.clearedFields, integritycheck.FieldReport)
+}
+
+// SetCreatedAt sets the "created_at" field.
+func (m *IntegrityCheckMutation) SetCreatedAt(t time.Time) {
+	m.created_at = &t
+}
+
+// CreatedAt returns the value of the "created_at" field in the mutation.
+func (m *IntegrityCheckMutation) CreatedAt() (r time.Time, exists bool) {
+	v := m.created_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedAt returns the old "created_at" field's value of the IntegrityCheck entity.
+// If the IntegrityCheck object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *IntegrityCheckMutation) OldCreatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedAt: %w", err)
+	}
+	return oldValue.CreatedAt, nil
+}
+
+// ResetCreatedAt resets all changes to the "created_at" field.
+func (m *IntegrityCheckMutation) ResetCreatedAt() {
+	m.created_at = nil
+}
+
+// Where appends a list predicates to the IntegrityCheckMutation builder.
+func (m *IntegrityCheckMutation) Where(ps ...predicate.IntegrityCheck) {
+	m.predicates = append(m.predicates, ps...)
+}
+
+// WhereP appends storage-level predicates to the IntegrityCheckMutation builder. Using this method,
+// users can use type-assertion to append predicates that do not depend on any generated package.
+func (m *IntegrityCheckMutation) WhereP(ps ...func(*sql.Selector)) {
+	p := make([]predicate.IntegrityCheck, len(ps))
+	for i := range ps {
+		p[i] = ps[i]
+	}
+	m.Where(p...)
+}
+
+// Op returns the operation name.
+func (m *IntegrityCheckMutation) Op() Op {
+	return m.op
+}
+
+// SetOp allows setting the mutation operation.
+func (m *IntegrityCheckMutation) SetOp(op Op) {
+	m.op = op
+}
+
+// Type returns the node type of this mutation (IntegrityCheck).
+func (m *IntegrityCheckMutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during this mutation. Note that in
+// order to get all numeric fields that were incremented/decremented, call
+// AddedFields().
+func (m *IntegrityCheckMutation) Fields() []string {
+	fields := make([]string, 0, 10)
+	if m.kind != nil {
+		fields = append(fields, integritycheck.FieldKind)
+	}
+	if m.started_at != nil {
+		fields = append(fields, integritycheck.FieldStartedAt)
+	}
+	if m.finished_at != nil {
+		fields = append(fields, integritycheck.FieldFinishedAt)
+	}
+	if m.checked != nil {
+		fields = append(fields, integritycheck.FieldChecked)
+	}
+	if m.verified != nil {
+		fields = append(fields, integritycheck.FieldVerified)
+	}
+	if m.unsigned != nil {
+		fields = append(fields, integritycheck.FieldUnsigned)
+	}
+	if m.failed != nil {
+		fields = append(fields, integritycheck.FieldFailed)
+	}
+	if m.checkpoint != nil {
+		fields = append(fields, integritycheck.FieldCheckpoint)
+	}
+	if m.report != nil {
+		fields = append(fields, integritycheck.FieldReport)
+	}
+	if m.created_at != nil {
+		fields = append(fields, integritycheck.FieldCreatedAt)
+	}
+	return fields
+}
+
+// Field returns the value of a field with the given name. The second boolean
+// return value indicates that this field was not set, or was not defined in the
+// schema.
+func (m *IntegrityCheckMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case integritycheck.FieldKind:
+		return m.Kind()
+	case integritycheck.FieldStartedAt:
+		return m.StartedAt()
+	case integritycheck.FieldFinishedAt:
+		return m.FinishedAt()
+	case integritycheck.FieldChecked:
+		return m.Checked()
+	case integritycheck.FieldVerified:
+		return m.Verified()
+	case integritycheck.FieldUnsigned:
+		return m.Unsigned()
+	case integritycheck.FieldFailed:
+		return m.Failed()
+	case integritycheck.FieldCheckpoint:
+		return m.Checkpoint()
+	case integritycheck.FieldReport:
+		return m.Report()
+	case integritycheck.FieldCreatedAt:
+		return m.CreatedAt()
+	}
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database. An error is
+// returned if the mutation operation is not UpdateOne, or the query to the
+// database failed.
+func (m *IntegrityCheckMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case integritycheck.FieldKind:
+		return m.OldKind(ctx)
+	case integritycheck.FieldStartedAt:
+		return m.OldStartedAt(ctx)
+	case integritycheck.FieldFinishedAt:
+		return m.OldFinishedAt(ctx)
+	case integritycheck.FieldChecked:
+		return m.OldChecked(ctx)
+	case integritycheck.FieldVerified:
+		return m.OldVerified(ctx)
+	case integritycheck.FieldUnsigned:
+		return m.OldUnsigned(ctx)
+	case integritycheck.FieldFailed:
+		return m.OldFailed(ctx)
+	case integritycheck.FieldCheckpoint:
+		return m.OldCheckpoint(ctx)
+	case integritycheck.FieldReport:
+		return m.OldReport(ctx)
+	case integritycheck.FieldCreatedAt:
+		return m.OldCreatedAt(ctx)
+	}
+	return nil, fmt.Errorf("unknown IntegrityCheck field %s", name)
+}
+
+// SetField sets the value of a field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *IntegrityCheckMutation) SetField(name string, value ent.Value) error {
+	switch name {
+	case integritycheck.FieldKind:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetKind(v)
+		return nil
+	case integritycheck.FieldStartedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetStartedAt(v)
+		return nil
+	case integritycheck.FieldFinishedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetFinishedAt(v)
+		return nil
+	case integritycheck.FieldChecked:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetChecked(v)
+		return nil
+	case integritycheck.FieldVerified:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetVerified(v)
+		return nil
+	case integritycheck.FieldUnsigned:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUnsigned(v)
+		return nil
+	case integritycheck.FieldFailed:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetFailed(v)
+		return nil
+	case integritycheck.FieldCheckpoint:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCheckpoint(v)
+		return nil
+	case integritycheck.FieldReport:
+		v, ok := value.(map[string]interface{})
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetReport(v)
+		return nil
+	case integritycheck.FieldCreatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedAt(v)
+		return nil
+	}
+	return fmt.Errorf("unknown IntegrityCheck field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented/decremented during
+// this mutation.
+func (m *IntegrityCheckMutation) AddedFields() []string {
+	var fields []string
+	if m.addchecked != nil {
+		fields = append(fields, integritycheck.FieldChecked)
+	}
+	if m.addverified != nil {
+		fields = append(fields, integritycheck.FieldVerified)
+	}
+	if m.addunsigned != nil {
+		fields = append(fields, integritycheck.FieldUnsigned)
+	}
+	if m.addfailed != nil {
+		fields = append(fields, integritycheck.FieldFailed)
+	}
+	return fields
+}
+
+// AddedField returns the numeric value that was incremented/decremented on a field
+// with the given name. The second boolean return value indicates that this field
+// was not set, or was not defined in the schema.
+func (m *IntegrityCheckMutation) AddedField(name string) (ent.Value, bool) {
+	switch name {
+	case integritycheck.FieldChecked:
+		return m.AddedChecked()
+	case integritycheck.FieldVerified:
+		return m.AddedVerified()
+	case integritycheck.FieldUnsigned:
+		return m.AddedUnsigned()
+	case integritycheck.FieldFailed:
+		return m.AddedFailed()
+	}
+	return nil, false
+}
+
+// AddField adds the value to the field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *IntegrityCheckMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	case integritycheck.FieldChecked:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddChecked(v)
+		return nil
+	case integritycheck.FieldVerified:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddVerified(v)
+		return nil
+	case integritycheck.FieldUnsigned:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddUnsigned(v)
+		return nil
+	case integritycheck.FieldFailed:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddFailed(v)
+		return nil
+	}
+	return fmt.Errorf("unknown IntegrityCheck numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared during this
+// mutation.
+func (m *IntegrityCheckMutation) ClearedFields() []string {
+	var fields []string
+	if m.FieldCleared(integritycheck.FieldCheckpoint) {
+		fields = append(fields, integritycheck.FieldCheckpoint)
+	}
+	if m.FieldCleared(integritycheck.FieldReport) {
+		fields = append(fields, integritycheck.FieldReport)
+	}
+	return fields
+}
+
+// FieldCleared returns a boolean indicating if a field with the given name was
+// cleared in this mutation.
+func (m *IntegrityCheckMutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value of the field with the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *IntegrityCheckMutation) ClearField(name string) error {
+	switch name {
+	case integritycheck.FieldCheckpoint:
+		m.ClearCheckpoint()
+		return nil
+	case integritycheck.FieldReport:
+		m.ClearReport()
+		return nil
+	}
+	return fmt.Errorf("unknown IntegrityCheck nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation for the field with the given name.
+// It returns an error if the field is not defined in the schema.
+func (m *IntegrityCheckMutation) ResetField(name string) error {
+	switch name {
+	case integritycheck.FieldKind:
+		m.ResetKind()
+		return nil
+	case integritycheck.FieldStartedAt:
+		m.ResetStartedAt()
+		return nil
+	case integritycheck.FieldFinishedAt:
+		m.ResetFinishedAt()
+		return nil
+	case integritycheck.FieldChecked:
+		m.ResetChecked()
+		return nil
+	case integritycheck.FieldVerified:
+		m.ResetVerified()
+		return nil
+	case integritycheck.FieldUnsigned:
+		m.ResetUnsigned()
+		return nil
+	case integritycheck.FieldFailed:
+		m.ResetFailed()
+		return nil
+	case integritycheck.FieldCheckpoint:
+		m.ResetCheckpoint()
+		return nil
+	case integritycheck.FieldReport:
+		m.ResetReport()
+		return nil
+	case integritycheck.FieldCreatedAt:
+		m.ResetCreatedAt()
+		return nil
+	}
+	return fmt.Errorf("unknown IntegrityCheck field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this mutation.
+func (m *IntegrityCheckMutation) AddedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// AddedIDs returns all IDs (to other nodes) that were added for the given edge
+// name in this mutation.
+func (m *IntegrityCheckMutation) AddedIDs(name string) []ent.Value {
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this mutation.
+func (m *IntegrityCheckMutation) RemovedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
+// the given name in this mutation.
+func (m *IntegrityCheckMutation) RemovedIDs(name string) []ent.Value {
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this mutation.
+func (m *IntegrityCheckMutation) ClearedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// EdgeCleared returns a boolean which indicates if the edge with the given name
+// was cleared in this mutation.
+func (m *IntegrityCheckMutation) EdgeCleared(name string) bool {
+	return false
+}
+
+// ClearEdge clears the value of the edge with the given name. It returns an error
+// if that edge is not defined in the schema.
+func (m *IntegrityCheckMutation) ClearEdge(name string) error {
+	return fmt.Errorf("unknown IntegrityCheck unique edge %s", name)
+}
+
+// ResetEdge resets all changes to the edge with the given name in this mutation.
+// It returns an error if the edge is not defined in the schema.
+func (m *IntegrityCheckMutation) ResetEdge(name string) error {
+	return fmt.Errorf("unknown IntegrityCheck edge %s", name)
 }

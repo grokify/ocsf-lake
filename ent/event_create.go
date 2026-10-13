@@ -140,6 +140,34 @@ func (_c *EventCreate) SetNillableRawData(v *string) *EventCreate {
 	return _c
 }
 
+// SetIntegrityStatus sets the "integrity_status" field.
+func (_c *EventCreate) SetIntegrityStatus(v string) *EventCreate {
+	_c.mutation.SetIntegrityStatus(v)
+	return _c
+}
+
+// SetNillableIntegrityStatus sets the "integrity_status" field if the given value is not nil.
+func (_c *EventCreate) SetNillableIntegrityStatus(v *string) *EventCreate {
+	if v != nil {
+		_c.SetIntegrityStatus(*v)
+	}
+	return _c
+}
+
+// SetIntegrityCheckedAt sets the "integrity_checked_at" field.
+func (_c *EventCreate) SetIntegrityCheckedAt(v time.Time) *EventCreate {
+	_c.mutation.SetIntegrityCheckedAt(v)
+	return _c
+}
+
+// SetNillableIntegrityCheckedAt sets the "integrity_checked_at" field if the given value is not nil.
+func (_c *EventCreate) SetNillableIntegrityCheckedAt(v *time.Time) *EventCreate {
+	if v != nil {
+		_c.SetIntegrityCheckedAt(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *EventCreate) SetID(v string) *EventCreate {
 	_c.mutation.SetID(v)
@@ -336,6 +364,14 @@ func (_c *EventCreate) createSpec() (*Event, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.RawData(); ok {
 		_spec.SetField(event.FieldRawData, field.TypeString, value)
 		_node.RawData = value
+	}
+	if value, ok := _c.mutation.IntegrityStatus(); ok {
+		_spec.SetField(event.FieldIntegrityStatus, field.TypeString, value)
+		_node.IntegrityStatus = value
+	}
+	if value, ok := _c.mutation.IntegrityCheckedAt(); ok {
+		_spec.SetField(event.FieldIntegrityCheckedAt, field.TypeTime, value)
+		_node.IntegrityCheckedAt = &value
 	}
 	return _node, _spec
 }
