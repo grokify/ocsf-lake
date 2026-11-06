@@ -31,3 +31,10 @@ Thumbs.db
 
 # Ideation/planning docs (not for commit)
 IDEATION_CHAT*.md
+
+# MkDocs build output
+/site/
+
+# Scratch output, never committed
+z/
+tmp/
