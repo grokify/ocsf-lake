@@ -3,7 +3,7 @@
 Status legend: `planned` | `in_progress` | `done`. Phase status is derived from member
 RMI statuses. The OCSF standard layer (bindings, validator, record-integrity crypto)
 is tracked separately in
-[ocsf-schema-go](https://github.com/grokify/ocsf-schema-go)'s roadmap.
+[ocsf-schema-go](https://github.com/opensecurity-dev/ocsf-schema-go)'s roadmap.
 
 ## Phase 1 — Core lake (initial scaffold)
 

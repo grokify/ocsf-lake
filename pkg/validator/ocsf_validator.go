@@ -5,8 +5,8 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/grokify/ocsf-schema-go/ocsf/ocsfdata"
-	"github.com/grokify/ocsf-schema-go/validate"
+	"github.com/opensecurity-dev/ocsf-schema-go/ocsf/ocsfdata"
+	"github.com/opensecurity-dev/ocsf-schema-go/validate"
 )
 
 // OCSFValidator validates events against the compiled OCSF schema embedded

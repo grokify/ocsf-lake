@@ -15,8 +15,8 @@ import (
 	"github.com/grokify/ocsf-lake/pkg/ocsf"
 	"github.com/grokify/ocsf-lake/pkg/storage"
 	"github.com/grokify/ocsf-lake/pkg/validator"
-	"github.com/grokify/ocsf-schema-go/recordintegrity"
-	"github.com/grokify/ocsf-schema-go/validate"
+	"github.com/opensecurity-dev/ocsf-schema-go/recordintegrity"
+	"github.com/opensecurity-dev/ocsf-schema-go/validate"
 )
 
 // Common errors.
@@ -238,7 +238,7 @@ func (l *Lake) Ingest(ctx context.Context, events ...json.RawMessage) error {
 }
 
 // IngestTyped validates and stores typed OCSF events, such as the generated
-// structs from github.com/grokify/ocsf-schema-go/ocsf/events (e.g.
+// structs from github.com/opensecurity-dev/ocsf-schema-go/ocsf/events (e.g.
 // *events.Authentication). Each event is marshaled and passes through the
 // same validation and indexing pipeline as Ingest.
 func (l *Lake) IngestTyped(ctx context.Context, events ...any) error {

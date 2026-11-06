@@ -1,7 +1,7 @@
 # Validator
 
 The `validator` package validates OCSF events against the compiled OCSF schema embedded
-in [ocsf-schema-go](https://github.com/grokify/ocsf-schema-go) — no schema files are
+in [ocsf-schema-go](https://github.com/opensecurity-dev/ocsf-schema-go) — no schema files are
 needed at runtime.
 
 ## Package

@@ -189,7 +189,7 @@ func (l *Lake) IngestTyped(ctx context.Context, events ...any) error
 ```
 
 Ingests typed events, such as the generated structs from
-`github.com/grokify/ocsf-schema-go/ocsf/events` (e.g. `events.Authentication`),
+`github.com/opensecurity-dev/ocsf-schema-go/ocsf/events` (e.g. `events.Authentication`),
 through the same validation and indexing pipeline as `Ingest`.
 
 ### Get

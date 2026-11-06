@@ -1,5 +1,5 @@
 // Package validator provides OCSF event validation for the lake, backed by
-// the compiled OCSF schema embedded in github.com/grokify/ocsf-schema-go.
+// the compiled OCSF schema embedded in github.com/opensecurity-dev/ocsf-schema-go.
 package validator
 
 import (

@@ -11,14 +11,14 @@ A Go library for storing, validating, and querying [OCSF](https://ocsf.io/) (Ope
 - **Pluggable Backends**: SQLite (in-memory or file) and PostgreSQL support via Ent ORM
 - **Real Schema Validation**: Events are validated against the compiled OCSF schema
   (required attributes, types, enums, constraints, UID consistency) embedded in
-  [ocsf-schema-go](https://github.com/grokify/ocsf-schema-go) — no schema files needed at runtime
+  [ocsf-schema-go](https://github.com/opensecurity-dev/ocsf-schema-go) — no schema files needed at runtime
 - **Typed Events**: Ingest the generated structs from ocsf-schema-go (`events.Authentication`, …)
   and decode stored events back to concrete types via the class-UID registry
 - **Flexible Querying**: Query by class, category, severity, source, time range, and more
 
 ocsf-lake is the datastore/application layer; the OCSF standard itself (generated
 structs, constants, caption maps, validator, schema compiler) lives in
-[ocsf-schema-go](https://github.com/grokify/ocsf-schema-go).
+[ocsf-schema-go](https://github.com/opensecurity-dev/ocsf-schema-go).
 
 ## Installation
 
@@ -44,7 +44,7 @@ import (
     "log"
 
     "github.com/grokify/ocsf-lake/pkg/lake"
-    "github.com/grokify/ocsf-schema-go/ocsf/events"
+    "github.com/opensecurity-dev/ocsf-schema-go/ocsf/events"
 
     _ "github.com/mattn/go-sqlite3"
 )
@@ -181,7 +181,7 @@ events, _ := l.QueryByTimeRange(ctx, fromMs, toMs)
 ## OCSF Classification Constants
 
 Classification constants, enum values, and caption maps come from the generated
-`github.com/grokify/ocsf-schema-go/ocsf/events` package, covering every OCSF
+`github.com/opensecurity-dev/ocsf-schema-go/ocsf/events` package, covering every OCSF
 category, class, and enum (including platform extensions):
 
 ```go
@@ -202,14 +202,14 @@ events.ClassCaptions[3002]         // "Authentication"
 ## Record Integrity Checks
 
 Events signed under the OCSF `record_integrity` profile (see
-[ocsf-schema-go/recordintegrity](https://github.com/grokify/ocsf-schema-go)) can be
+[ocsf-schema-go/recordintegrity](https://github.com/opensecurity-dev/ocsf-schema-go)) can be
 verified in the lake — one event on demand, everything, everything since a checkpoint,
 a random sample, or a full tamper-evident chain:
 
 ```go
 import (
     "github.com/grokify/ocsf-lake/pkg/integrity"
-    ri "github.com/grokify/ocsf-schema-go/recordintegrity"
+    ri "github.com/opensecurity-dev/ocsf-schema-go/recordintegrity"
 )
 
 policy := integrity.DefaultPolicy() // AllowUnsigned: true (unsigned = warning)
@@ -364,7 +364,7 @@ ocsf-lake/
 │   └── validator/        # Event validation
 │       ├── validator.go  # Validator interface and modes
 │       └── ocsf_validator.go # Schema-backed validator (ocsf-schema-go)
-└── (OCSF standard types live in github.com/grokify/ocsf-schema-go)
+└── (OCSF standard types live in github.com/opensecurity-dev/ocsf-schema-go)
 ```
 
 ## License

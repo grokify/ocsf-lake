@@ -2,14 +2,14 @@
 
 The `integrity` package verifies OCSF `record_integrity` attestations over stored
 events, using the cryptographic primitives from
-[ocsf-schema-go/recordintegrity](https://github.com/grokify/ocsf-schema-go).
+[ocsf-schema-go/recordintegrity](https://github.com/opensecurity-dev/ocsf-schema-go).
 
 ## Package
 
 ```go
 import (
     "github.com/grokify/ocsf-lake/pkg/integrity"
-    ri "github.com/grokify/ocsf-schema-go/recordintegrity"
+    ri "github.com/opensecurity-dev/ocsf-schema-go/recordintegrity"
 )
 ```
 

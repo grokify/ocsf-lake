@@ -11,7 +11,7 @@ import (
 	"github.com/spf13/cobra"
 
 	"github.com/grokify/ocsf-lake/pkg/integrity"
-	ri "github.com/grokify/ocsf-schema-go/recordintegrity"
+	ri "github.com/opensecurity-dev/ocsf-schema-go/recordintegrity"
 )
 
 // trustFlags supply verification inputs shared by ingest --integrity and the

@@ -7,7 +7,7 @@ import (
 	"time"
 
 	"github.com/grokify/ocsf-lake/pkg/ocsf"
-	ri "github.com/grokify/ocsf-schema-go/recordintegrity"
+	ri "github.com/opensecurity-dev/ocsf-schema-go/recordintegrity"
 )
 
 // chainInfo is the slice of an event payload the chain walker needs.

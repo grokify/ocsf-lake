@@ -15,7 +15,7 @@ import (
     "log"
 
     "github.com/grokify/ocsf-lake/pkg/lake"
-    "github.com/grokify/ocsf-schema-go/ocsf/events"
+    "github.com/opensecurity-dev/ocsf-schema-go/ocsf/events"
 
     _ "github.com/mattn/go-sqlite3"
 )
@@ -81,7 +81,7 @@ import (
     "time"
 
     "github.com/grokify/ocsf-lake/pkg/lake"
-    "github.com/grokify/ocsf-schema-go/ocsf/events"
+    "github.com/opensecurity-dev/ocsf-schema-go/ocsf/events"
 
     _ "github.com/mattn/go-sqlite3"
 )
@@ -136,7 +136,7 @@ import (
     "time"
 
     "github.com/grokify/ocsf-lake/pkg/lake"
-    "github.com/grokify/ocsf-schema-go/ocsf/events"
+    "github.com/opensecurity-dev/ocsf-schema-go/ocsf/events"
     "github.com/grokify/ocsf-lake/pkg/storage"
 
     _ "github.com/mattn/go-sqlite3"
@@ -219,7 +219,7 @@ import (
 
     "github.com/grokify/ocsf-lake/pkg/lake"
     "github.com/grokify/ocsf-lake/pkg/ocsf"
-    "github.com/grokify/ocsf-schema-go/ocsf/events"
+    "github.com/opensecurity-dev/ocsf-schema-go/ocsf/events"
 
     _ "github.com/mattn/go-sqlite3"
 )
@@ -351,7 +351,7 @@ import (
     "entgo.io/ent/dialect/sql"
     "github.com/grokify/ocsf-lake/ent/event"
     "github.com/grokify/ocsf-lake/pkg/lake"
-    "github.com/grokify/ocsf-schema-go/ocsf/events"
+    "github.com/opensecurity-dev/ocsf-schema-go/ocsf/events"
     "github.com/grokify/ocsf-lake/pkg/storage"
 
     _ "github.com/mattn/go-sqlite3"

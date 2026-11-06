@@ -8,7 +8,7 @@ ocsf-lake is the **datastore/application layer** for OCSF security events: stora
 (Ent: SQLite/PostgreSQL), querying, schema validation at ingest, record-integrity
 verification, and the `ocsflake` CLI.
 
-The **OCSF standard itself lives in `github.com/grokify/ocsf-schema-go`**: generated
+The **OCSF standard itself lives in `github.com/opensecurity-dev/ocsf-schema-go`**: generated
 event/object structs, classification constants, caption maps, the class-UID registry,
 the schema compiler, the semantic validator (`validate`), and the record_integrity
 crypto (`recordintegrity`). Never re-implement spec-derived types or constants here —
@@ -52,7 +52,7 @@ go generate ./ent              # regenerate ORM after editing ent/schema/
   `Policy.AllowUnsigned=true` (default) and failures otherwise. Ingest-time
   verification runs *before* the lake's own attestation is added.
 - **`replace` directive**: during local development `go.mod` may carry
-  `replace github.com/grokify/ocsf-schema-go => ../ocsf-schema-go` (relative path
+  `replace github.com/opensecurity-dev/ocsf-schema-go => ../ocsf-schema-go` (relative path
   only). It must be removed before pushing.
 - Tests that exercise querying (not schema completeness) use permissive validation
   with minimal fixtures; tests of the ingest path use fully valid events (or

@@ -9,9 +9,9 @@ import (
 
 	"github.com/grokify/ocsf-lake/pkg/lake"
 	"github.com/grokify/ocsf-lake/pkg/storage"
-	"github.com/grokify/ocsf-schema-go/ocsf/events"
-	"github.com/grokify/ocsf-schema-go/ocsf/objects"
-	"github.com/grokify/ocsf-schema-go/validate"
+	"github.com/opensecurity-dev/ocsf-schema-go/ocsf/events"
+	"github.com/opensecurity-dev/ocsf-schema-go/ocsf/objects"
+	"github.com/opensecurity-dev/ocsf-schema-go/validate"
 
 	_ "github.com/mattn/go-sqlite3" // SQLite driver
 )

@@ -1,6 +1,6 @@
 // Package integrity runs record-integrity checks over events stored in the
 // lake, using the cryptographic primitives of
-// github.com/grokify/ocsf-schema-go/recordintegrity.
+// github.com/opensecurity-dev/ocsf-schema-go/recordintegrity.
 //
 // Check modes:
 //
@@ -26,7 +26,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/grokify/ocsf-lake/pkg/ocsf"
 	"github.com/grokify/ocsf-lake/pkg/storage"
-	ri "github.com/grokify/ocsf-schema-go/recordintegrity"
+	ri "github.com/opensecurity-dev/ocsf-schema-go/recordintegrity"
 )
 
 // Outcome classifies one checked event.

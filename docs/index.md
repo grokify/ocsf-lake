@@ -6,7 +6,7 @@ A Go library for storing, validating, and querying [OCSF](https://ocsf.io/) (Ope
 
 - **OCSF Event Storage** - Store OCSF events with automatic extraction of key fields for indexing
 - **Pluggable Backends** - SQLite (in-memory or file) and PostgreSQL support via Ent ORM
-- **Real Schema Validation** - events checked against the compiled OCSF schema (required attributes, types, enums, constraints, UID consistency) embedded in [ocsf-schema-go](https://github.com/grokify/ocsf-schema-go)
+- **Real Schema Validation** - events checked against the compiled OCSF schema (required attributes, types, enums, constraints, UID consistency) embedded in [ocsf-schema-go](https://github.com/opensecurity-dev/ocsf-schema-go)
 - **Record Integrity** - verify signed events (`record_integrity` profile): on-demand, full, incremental, sampled, and chain checks; verify or attest at ingest; persisted check reports
 - **Type-Safe** - generated OCSF structs and constants from ocsf-schema-go, with typed ingest and class-UID decode
 - **Flexible Querying** - Query by class, category, severity, source, time range, and more
@@ -25,7 +25,7 @@ import (
     "log"
 
     "github.com/grokify/ocsf-lake/pkg/lake"
-    "github.com/grokify/ocsf-schema-go/ocsf/events"
+    "github.com/opensecurity-dev/ocsf-schema-go/ocsf/events"
 
     _ "github.com/mattn/go-sqlite3"
 )

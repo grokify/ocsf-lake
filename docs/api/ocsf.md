@@ -3,15 +3,15 @@
 The `ocsf` package holds the **storage-side** representation of OCSF events. The OCSF
 standard itself — generated event/object structs, classification constants, enum caption
 maps, and the class-UID registry — lives in
-[ocsf-schema-go](https://github.com/grokify/ocsf-schema-go).
+[ocsf-schema-go](https://github.com/opensecurity-dev/ocsf-schema-go).
 
 ## Package
 
 ```go
 import (
     "github.com/grokify/ocsf-lake/pkg/ocsf"          // storage envelope
-    "github.com/grokify/ocsf-schema-go/ocsf/events"  // OCSF standard: events, constants
-    "github.com/grokify/ocsf-schema-go/ocsf/objects" // OCSF standard: objects
+    "github.com/opensecurity-dev/ocsf-schema-go/ocsf/events"  // OCSF standard: events, constants
+    "github.com/opensecurity-dev/ocsf-schema-go/ocsf/objects" // OCSF standard: objects
 )
 ```
 

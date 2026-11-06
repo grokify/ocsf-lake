@@ -15,7 +15,7 @@ import (
 	"time"
 
 	"github.com/grokify/ocsf-lake/pkg/integrity"
-	ri "github.com/grokify/ocsf-schema-go/recordintegrity"
+	ri "github.com/opensecurity-dev/ocsf-schema-go/recordintegrity"
 )
 
 // Authority is an ephemeral signing identity (ECDSA P-256 key plus

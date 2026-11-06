@@ -101,7 +101,7 @@ if err != nil {
 ### Required Fields
 
 Events are validated against the compiled OCSF schema from
-[ocsf-schema-go](https://github.com/grokify/ocsf-schema-go). In the default strict mode,
+[ocsf-schema-go](https://github.com/opensecurity-dev/ocsf-schema-go). In the default strict mode,
 each event class's required attributes and constraints apply (for Authentication:
 `activity_id`, `category_uid`, `class_uid`, `metadata`, `severity_id`, `time`,
 `type_uid`, `user`, and one of `dst_endpoint`/`service`). In permissive mode only the
@@ -125,7 +125,7 @@ err := l.Ingest(ctx, events...)
 ### Using Query Builder
 
 ```go
-import "github.com/grokify/ocsf-schema-go/ocsf/events"
+import "github.com/opensecurity-dev/ocsf-schema-go/ocsf/events"
 
 // Query high-severity authentication events
 q := l.QueryBuilder().

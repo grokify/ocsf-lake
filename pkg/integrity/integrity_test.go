@@ -17,7 +17,7 @@ import (
 
 	"github.com/grokify/ocsf-lake/pkg/integrity"
 	"github.com/grokify/ocsf-lake/pkg/lake"
-	ri "github.com/grokify/ocsf-schema-go/recordintegrity"
+	ri "github.com/opensecurity-dev/ocsf-schema-go/recordintegrity"
 
 	_ "github.com/mattn/go-sqlite3" // SQLite driver
 )

@@ -6,8 +6,8 @@ import (
 
 	"github.com/grokify/ocsf-lake/pkg/integrity"
 	"github.com/grokify/ocsf-lake/pkg/validator"
-	"github.com/grokify/ocsf-schema-go/ocsf/events"
-	"github.com/grokify/ocsf-schema-go/validate"
+	"github.com/opensecurity-dev/ocsf-schema-go/ocsf/events"
+	"github.com/opensecurity-dev/ocsf-schema-go/validate"
 )
 
 // IngestIntegrityMode controls record-integrity checking during ingestion.

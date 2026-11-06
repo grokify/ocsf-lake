@@ -3,7 +3,7 @@
 //
 // The OCSF standard itself — generated event/object structs, classification
 // constants, caption maps, and the class-UID registry — lives in
-// github.com/grokify/ocsf-schema-go (ocsf/events, ocsf/objects). This package
+// github.com/opensecurity-dev/ocsf-schema-go (ocsf/events, ocsf/objects). This package
 // only holds what is specific to storing events in a data lake.
 package ocsf
 
@@ -11,7 +11,7 @@ import (
 	"encoding/json"
 	"time"
 
-	"github.com/grokify/ocsf-schema-go/ocsf/events"
+	"github.com/opensecurity-dev/ocsf-schema-go/ocsf/events"
 )
 
 // StoredEvent represents an OCSF event as stored in the data lake.
