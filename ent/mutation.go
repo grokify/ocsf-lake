@@ -11,9 +11,9 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/grokify/ocsf-lake/ent/event"
-	"github.com/grokify/ocsf-lake/ent/integritycheck"
-	"github.com/grokify/ocsf-lake/ent/predicate"
+	"github.com/opensecurity-dev/ocsf-lake/ent/event"
+	"github.com/opensecurity-dev/ocsf-lake/ent/integritycheck"
+	"github.com/opensecurity-dev/ocsf-lake/ent/predicate"
 )
 
 const (

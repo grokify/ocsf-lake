@@ -4,7 +4,7 @@
 integrity-check, seed, and standalone sign/verify.
 
 ```bash
-go install github.com/grokify/ocsf-lake/cmd/ocsflake@latest
+go install github.com/opensecurity-dev/ocsf-lake/cmd/ocsflake@latest
 ```
 
 ## Global flags

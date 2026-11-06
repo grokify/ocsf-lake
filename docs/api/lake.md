@@ -5,7 +5,7 @@ The `Lake` type is the main facade for storing and querying OCSF events.
 ## Package
 
 ```go
-import "github.com/grokify/ocsf-lake/pkg/lake"
+import "github.com/opensecurity-dev/ocsf-lake/pkg/lake"
 ```
 
 ## Creating a Lake

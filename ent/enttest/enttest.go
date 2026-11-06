@@ -5,12 +5,12 @@ package enttest
 import (
 	"context"
 
-	"github.com/grokify/ocsf-lake/ent"
+	"github.com/opensecurity-dev/ocsf-lake/ent"
 	// required by schema hooks.
-	_ "github.com/grokify/ocsf-lake/ent/runtime"
+	_ "github.com/opensecurity-dev/ocsf-lake/ent/runtime"
 
 	"entgo.io/ent/dialect/sql/schema"
-	"github.com/grokify/ocsf-lake/ent/migrate"
+	"github.com/opensecurity-dev/ocsf-lake/ent/migrate"
 )
 
 type (

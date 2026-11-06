@@ -2,8 +2,8 @@
 
 A Go library for storing, validating, and querying [OCSF](https://ocsf.io/) (Open Cybersecurity Schema Framework) events with pluggable storage backends.
 
-[![GoDoc](https://godoc.org/github.com/grokify/ocsf-lake?status.svg)](https://godoc.org/github.com/grokify/ocsf-lake)
-[![Docs](https://img.shields.io/badge/docs-MkDocs-blue)](https://grokify.github.io/ocsf-lake/)
+[![GoDoc](https://godoc.org/github.com/opensecurity-dev/ocsf-lake?status.svg)](https://godoc.org/github.com/opensecurity-dev/ocsf-lake)
+[![Docs](https://img.shields.io/badge/docs-MkDocs-blue)](https://opensecurity-dev.github.io/ocsf-lake/)
 
 ## Features
 
@@ -23,7 +23,7 @@ structs, constants, caption maps, validator, schema compiler) lives in
 ## Installation
 
 ```bash
-go get github.com/grokify/ocsf-lake
+go get github.com/opensecurity-dev/ocsf-lake
 ```
 
 For SQLite support, you need CGO enabled and the SQLite driver:
@@ -43,7 +43,7 @@ import (
     "fmt"
     "log"
 
-    "github.com/grokify/ocsf-lake/pkg/lake"
+    "github.com/opensecurity-dev/ocsf-lake/pkg/lake"
     "github.com/opensecurity-dev/ocsf-schema-go/ocsf/events"
 
     _ "github.com/mattn/go-sqlite3"
@@ -208,7 +208,7 @@ a random sample, or a full tamper-evident chain:
 
 ```go
 import (
-    "github.com/grokify/ocsf-lake/pkg/integrity"
+    "github.com/opensecurity-dev/ocsf-lake/pkg/integrity"
     ri "github.com/opensecurity-dev/ocsf-schema-go/recordintegrity"
 )
 
@@ -267,7 +267,7 @@ l, _ = lake.New(ctx,
 `cmd/ocsflake` wraps the library for pipelines and operations:
 
 ```bash
-go install github.com/grokify/ocsf-lake/cmd/ocsflake@latest
+go install github.com/opensecurity-dev/ocsf-lake/cmd/ocsflake@latest
 
 # Sign a chain of events, ingest, and verify it end to end
 ocsflake sign --key key.pem --signer-cert cert.pem --chain-uid audit e1.json > s1.json
@@ -334,11 +334,11 @@ decoded, _ := stored[0].Decode() // *events.Authentication via class-UID registr
 
 ## Documentation
 
-Full documentation is available at [grokify.github.io/ocsf-lake](https://grokify.github.io/ocsf-lake/).
+Full documentation is available at [opensecurity-dev.github.io/ocsf-lake](https://opensecurity-dev.github.io/ocsf-lake/).
 
-- [Getting Started](https://grokify.github.io/ocsf-lake/getting-started/)
-- [API Reference](https://grokify.github.io/ocsf-lake/api/lake/)
-- [Examples](https://grokify.github.io/ocsf-lake/examples/)
+- [Getting Started](https://opensecurity-dev.github.io/ocsf-lake/getting-started/)
+- [API Reference](https://opensecurity-dev.github.io/ocsf-lake/api/lake/)
+- [Examples](https://opensecurity-dev.github.io/ocsf-lake/examples/)
 
 ## Architecture
 

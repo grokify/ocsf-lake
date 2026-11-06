@@ -8,10 +8,10 @@ import (
 
 	"entgo.io/ent/dialect"
 	entsql "entgo.io/ent/dialect/sql"
-	"github.com/grokify/ocsf-lake/ent"
-	"github.com/grokify/ocsf-lake/ent/event"
-	"github.com/grokify/ocsf-lake/ent/integritycheck"
-	"github.com/grokify/ocsf-lake/pkg/ocsf"
+	"github.com/opensecurity-dev/ocsf-lake/ent"
+	"github.com/opensecurity-dev/ocsf-lake/ent/event"
+	"github.com/opensecurity-dev/ocsf-lake/ent/integritycheck"
+	"github.com/opensecurity-dev/ocsf-lake/pkg/ocsf"
 )
 
 // EntStorage implements Storage using Ent ORM.

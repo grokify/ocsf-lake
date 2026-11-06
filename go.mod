@@ -1,4 +1,4 @@
-module github.com/grokify/ocsf-lake
+module github.com/opensecurity-dev/ocsf-lake
 
 go 1.26.4
 

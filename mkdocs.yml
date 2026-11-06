@@ -1,8 +1,8 @@
 site_name: ocsf-lake
 site_description: Go library for storing, validating, and querying OCSF events
-site_url: https://grokify.github.io/ocsf-lake/
-repo_url: https://github.com/grokify/ocsf-lake
-repo_name: grokify/ocsf-lake
+site_url: https://opensecurity-dev.github.io/ocsf-lake/
+repo_url: https://github.com/opensecurity-dev/ocsf-lake
+repo_name: opensecurity-dev/ocsf-lake
 
 theme:
   name: material
@@ -61,4 +61,4 @@ plugins:
 extra:
   social:
     - icon: fontawesome/brands/github
-      link: https://github.com/grokify/ocsf-lake
+      link: https://github.com/opensecurity-dev/ocsf-lake

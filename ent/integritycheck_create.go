@@ -10,7 +10,7 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/grokify/ocsf-lake/ent/integritycheck"
+	"github.com/opensecurity-dev/ocsf-lake/ent/integritycheck"
 )
 
 // IntegrityCheckCreate is the builder for creating a IntegrityCheck entity.

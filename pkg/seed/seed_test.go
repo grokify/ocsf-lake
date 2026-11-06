@@ -6,9 +6,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/grokify/ocsf-lake/pkg/integrity"
-	"github.com/grokify/ocsf-lake/pkg/lake"
-	"github.com/grokify/ocsf-lake/pkg/seed"
+	"github.com/opensecurity-dev/ocsf-lake/pkg/integrity"
+	"github.com/opensecurity-dev/ocsf-lake/pkg/lake"
+	"github.com/opensecurity-dev/ocsf-lake/pkg/seed"
 	"github.com/opensecurity-dev/ocsf-schema-go/ocsf/ocsfdata"
 	"github.com/opensecurity-dev/ocsf-schema-go/validate"
 

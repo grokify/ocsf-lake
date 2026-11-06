@@ -1,7 +1,7 @@
 {
   "irVersion": "1.0",
   "project": "ocsf-lake",
-  "repository": "https://github.com/grokify/ocsf-lake",
+  "repository": "https://github.com/opensecurity-dev/ocsf-lake",
   "versioning": "semver",
   "commitConvention": "conventional",
   "maintainers": [

@@ -6,7 +6,7 @@ lake — usable from `_test.go` files or via `ocsflake seed`.
 ## Package
 
 ```go
-import "github.com/grokify/ocsf-lake/pkg/seed"
+import "github.com/opensecurity-dev/ocsf-lake/pkg/seed"
 ```
 
 ## What it generates

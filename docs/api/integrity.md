@@ -8,7 +8,7 @@ events, using the cryptographic primitives from
 
 ```go
 import (
-    "github.com/grokify/ocsf-lake/pkg/integrity"
+    "github.com/opensecurity-dev/ocsf-lake/pkg/integrity"
     ri "github.com/opensecurity-dev/ocsf-schema-go/recordintegrity"
 )
 ```

@@ -7,7 +7,7 @@ needed at runtime.
 ## Package
 
 ```go
-import "github.com/grokify/ocsf-lake/pkg/validator"
+import "github.com/opensecurity-dev/ocsf-lake/pkg/validator"
 ```
 
 ## Validator Interface

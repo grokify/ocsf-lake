@@ -10,8 +10,8 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/grokify/ocsf-lake/pkg/lake"
-	"github.com/grokify/ocsf-lake/pkg/storage"
+	"github.com/opensecurity-dev/ocsf-lake/pkg/lake"
+	"github.com/opensecurity-dev/ocsf-lake/pkg/storage"
 )
 
 func ingestCmd(g *globalFlags) *cobra.Command {

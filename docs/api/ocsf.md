@@ -9,7 +9,7 @@ maps, and the class-UID registry — lives in
 
 ```go
 import (
-    "github.com/grokify/ocsf-lake/pkg/ocsf"          // storage envelope
+    "github.com/opensecurity-dev/ocsf-lake/pkg/ocsf"          // storage envelope
     "github.com/opensecurity-dev/ocsf-schema-go/ocsf/events"  // OCSF standard: events, constants
     "github.com/opensecurity-dev/ocsf-schema-go/ocsf/objects" // OCSF standard: objects
 )

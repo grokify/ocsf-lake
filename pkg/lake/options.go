@@ -4,8 +4,8 @@ import (
 	"crypto"
 	"crypto/x509"
 
-	"github.com/grokify/ocsf-lake/pkg/integrity"
-	"github.com/grokify/ocsf-lake/pkg/validator"
+	"github.com/opensecurity-dev/ocsf-lake/pkg/integrity"
+	"github.com/opensecurity-dev/ocsf-lake/pkg/validator"
 	"github.com/opensecurity-dev/ocsf-schema-go/ocsf/events"
 	"github.com/opensecurity-dev/ocsf-schema-go/validate"
 )

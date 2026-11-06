@@ -10,7 +10,7 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/grokify/ocsf-lake/ent/event"
+	"github.com/opensecurity-dev/ocsf-lake/ent/event"
 )
 
 // Event is the model entity for the Event schema.

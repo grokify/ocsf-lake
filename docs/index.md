@@ -24,7 +24,7 @@ import (
     "fmt"
     "log"
 
-    "github.com/grokify/ocsf-lake/pkg/lake"
+    "github.com/opensecurity-dev/ocsf-lake/pkg/lake"
     "github.com/opensecurity-dev/ocsf-schema-go/ocsf/events"
 
     _ "github.com/mattn/go-sqlite3"
@@ -71,7 +71,7 @@ func main() {
 ## Installation
 
 ```bash
-go get github.com/grokify/ocsf-lake
+go get github.com/opensecurity-dev/ocsf-lake
 ```
 
 For SQLite support (requires CGO):
@@ -111,4 +111,4 @@ Key OCSF concepts:
 
 ## License
 
-MIT License - see [LICENSE](https://github.com/grokify/ocsf-lake/blob/main/LICENSE) for details.
+MIT License - see [LICENSE](https://github.com/opensecurity-dev/ocsf-lake/blob/main/LICENSE) for details.

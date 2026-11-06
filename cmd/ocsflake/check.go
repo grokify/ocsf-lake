@@ -5,7 +5,7 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/grokify/ocsf-lake/pkg/integrity"
+	"github.com/opensecurity-dev/ocsf-lake/pkg/integrity"
 )
 
 // checkRunFlags are shared by the check subcommands.

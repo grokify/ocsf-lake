@@ -5,9 +5,9 @@ package ent
 import (
 	"time"
 
-	"github.com/grokify/ocsf-lake/ent/event"
-	"github.com/grokify/ocsf-lake/ent/integritycheck"
-	"github.com/grokify/ocsf-lake/ent/schema"
+	"github.com/opensecurity-dev/ocsf-lake/ent/event"
+	"github.com/opensecurity-dev/ocsf-lake/ent/integritycheck"
+	"github.com/opensecurity-dev/ocsf-lake/ent/schema"
 )
 
 // The init function reads all schema descriptors with runtime code

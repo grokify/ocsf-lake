@@ -6,7 +6,7 @@ import (
 	"sort"
 	"time"
 
-	"github.com/grokify/ocsf-lake/pkg/ocsf"
+	"github.com/opensecurity-dev/ocsf-lake/pkg/ocsf"
 	ri "github.com/opensecurity-dev/ocsf-schema-go/recordintegrity"
 )
 

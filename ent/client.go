@@ -9,13 +9,13 @@ import (
 	"log"
 	"reflect"
 
-	"github.com/grokify/ocsf-lake/ent/migrate"
+	"github.com/opensecurity-dev/ocsf-lake/ent/migrate"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect"
 	"entgo.io/ent/dialect/sql"
-	"github.com/grokify/ocsf-lake/ent/event"
-	"github.com/grokify/ocsf-lake/ent/integritycheck"
+	"github.com/opensecurity-dev/ocsf-lake/ent/event"
+	"github.com/opensecurity-dev/ocsf-lake/ent/integritycheck"
 )
 
 // Client is the client that holds all ent builders.

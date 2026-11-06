@@ -11,10 +11,10 @@ import (
 	"time"
 
 	"github.com/google/uuid"
-	"github.com/grokify/ocsf-lake/pkg/integrity"
-	"github.com/grokify/ocsf-lake/pkg/ocsf"
-	"github.com/grokify/ocsf-lake/pkg/storage"
-	"github.com/grokify/ocsf-lake/pkg/validator"
+	"github.com/opensecurity-dev/ocsf-lake/pkg/integrity"
+	"github.com/opensecurity-dev/ocsf-lake/pkg/ocsf"
+	"github.com/opensecurity-dev/ocsf-lake/pkg/storage"
+	"github.com/opensecurity-dev/ocsf-lake/pkg/validator"
 	"github.com/opensecurity-dev/ocsf-schema-go/recordintegrity"
 	"github.com/opensecurity-dev/ocsf-schema-go/validate"
 )

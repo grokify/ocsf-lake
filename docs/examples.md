@@ -14,7 +14,7 @@ import (
     "encoding/json"
     "log"
 
-    "github.com/grokify/ocsf-lake/pkg/lake"
+    "github.com/opensecurity-dev/ocsf-lake/pkg/lake"
     "github.com/opensecurity-dev/ocsf-schema-go/ocsf/events"
 
     _ "github.com/mattn/go-sqlite3"
@@ -80,7 +80,7 @@ import (
     "log"
     "time"
 
-    "github.com/grokify/ocsf-lake/pkg/lake"
+    "github.com/opensecurity-dev/ocsf-lake/pkg/lake"
     "github.com/opensecurity-dev/ocsf-schema-go/ocsf/events"
 
     _ "github.com/mattn/go-sqlite3"
@@ -135,9 +135,9 @@ import (
     "log"
     "time"
 
-    "github.com/grokify/ocsf-lake/pkg/lake"
+    "github.com/opensecurity-dev/ocsf-lake/pkg/lake"
     "github.com/opensecurity-dev/ocsf-schema-go/ocsf/events"
-    "github.com/grokify/ocsf-lake/pkg/storage"
+    "github.com/opensecurity-dev/ocsf-lake/pkg/storage"
 
     _ "github.com/mattn/go-sqlite3"
 )
@@ -217,8 +217,8 @@ import (
     "log"
     "time"
 
-    "github.com/grokify/ocsf-lake/pkg/lake"
-    "github.com/grokify/ocsf-lake/pkg/ocsf"
+    "github.com/opensecurity-dev/ocsf-lake/pkg/lake"
+    "github.com/opensecurity-dev/ocsf-lake/pkg/ocsf"
     "github.com/opensecurity-dev/ocsf-schema-go/ocsf/events"
 
     _ "github.com/mattn/go-sqlite3"
@@ -271,7 +271,7 @@ import (
     "log"
     "time"
 
-    "github.com/grokify/ocsf-lake/pkg/lake"
+    "github.com/opensecurity-dev/ocsf-lake/pkg/lake"
 
     _ "github.com/mattn/go-sqlite3"
 )
@@ -310,7 +310,7 @@ import (
     "log"
     "os"
 
-    "github.com/grokify/ocsf-lake/pkg/lake"
+    "github.com/opensecurity-dev/ocsf-lake/pkg/lake"
 
     _ "github.com/lib/pq"
 )
@@ -349,10 +349,10 @@ import (
     "log"
 
     "entgo.io/ent/dialect/sql"
-    "github.com/grokify/ocsf-lake/ent/event"
-    "github.com/grokify/ocsf-lake/pkg/lake"
+    "github.com/opensecurity-dev/ocsf-lake/ent/event"
+    "github.com/opensecurity-dev/ocsf-lake/pkg/lake"
     "github.com/opensecurity-dev/ocsf-schema-go/ocsf/events"
-    "github.com/grokify/ocsf-lake/pkg/storage"
+    "github.com/opensecurity-dev/ocsf-lake/pkg/storage"
 
     _ "github.com/mattn/go-sqlite3"
 )

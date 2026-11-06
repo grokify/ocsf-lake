@@ -14,7 +14,7 @@ import (
 	"path/filepath"
 	"time"
 
-	"github.com/grokify/ocsf-lake/pkg/integrity"
+	"github.com/opensecurity-dev/ocsf-lake/pkg/integrity"
 	ri "github.com/opensecurity-dev/ocsf-schema-go/recordintegrity"
 )
 

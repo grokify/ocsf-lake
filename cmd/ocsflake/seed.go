@@ -6,7 +6,7 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/grokify/ocsf-lake/pkg/seed"
+	"github.com/opensecurity-dev/ocsf-lake/pkg/seed"
 )
 
 func seedCmd(g *globalFlags) *cobra.Command {

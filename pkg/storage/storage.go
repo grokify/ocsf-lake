@@ -6,7 +6,7 @@ import (
 	"errors"
 	"time"
 
-	"github.com/grokify/ocsf-lake/pkg/ocsf"
+	"github.com/opensecurity-dev/ocsf-lake/pkg/ocsf"
 )
 
 // Common storage errors.

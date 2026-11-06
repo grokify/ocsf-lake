@@ -5,7 +5,7 @@ The storage package provides the interface and implementations for OCSF event st
 ## Package
 
 ```go
-import "github.com/grokify/ocsf-lake/pkg/storage"
+import "github.com/opensecurity-dev/ocsf-lake/pkg/storage"
 ```
 
 ## Storage Interface

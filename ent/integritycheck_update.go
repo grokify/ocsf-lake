@@ -11,8 +11,8 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/grokify/ocsf-lake/ent/integritycheck"
-	"github.com/grokify/ocsf-lake/ent/predicate"
+	"github.com/opensecurity-dev/ocsf-lake/ent/integritycheck"
+	"github.com/opensecurity-dev/ocsf-lake/ent/predicate"
 )
 
 // IntegrityCheckUpdate is the builder for updating IntegrityCheck entities.

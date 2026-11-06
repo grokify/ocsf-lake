@@ -6,7 +6,7 @@ import (
 	"time"
 
 	"entgo.io/ent/dialect/sql"
-	"github.com/grokify/ocsf-lake/ent/predicate"
+	"github.com/opensecurity-dev/ocsf-lake/ent/predicate"
 )
 
 // ID filters vertices based on their ID field.

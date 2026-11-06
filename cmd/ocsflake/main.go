@@ -10,7 +10,7 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/grokify/ocsf-lake/pkg/lake"
+	"github.com/opensecurity-dev/ocsf-lake/pkg/lake"
 	"github.com/opensecurity-dev/ocsf-schema-go/validate"
 
 	_ "github.com/mattn/go-sqlite3" // SQLite driver

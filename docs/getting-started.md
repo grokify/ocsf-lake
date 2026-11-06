@@ -5,7 +5,7 @@ This guide walks you through setting up ocsf-lake and performing basic operation
 ## Installation
 
 ```bash
-go get github.com/grokify/ocsf-lake
+go get github.com/opensecurity-dev/ocsf-lake
 ```
 
 ### SQLite Driver (CGO required)
@@ -35,7 +35,7 @@ Best for testing and development:
 ```go
 import (
     "context"
-    "github.com/grokify/ocsf-lake/pkg/lake"
+    "github.com/opensecurity-dev/ocsf-lake/pkg/lake"
     _ "github.com/mattn/go-sqlite3"
 )
 

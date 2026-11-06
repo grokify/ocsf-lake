@@ -10,7 +10,7 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/grokify/ocsf-lake/ent/event"
+	"github.com/opensecurity-dev/ocsf-lake/ent/event"
 )
 
 // EventCreate is the builder for creating a Event entity.

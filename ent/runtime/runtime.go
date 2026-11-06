@@ -2,7 +2,7 @@
 
 package runtime
 
-// The schema-stitching logic is generated in github.com/grokify/ocsf-lake/ent/runtime.go
+// The schema-stitching logic is generated in github.com/opensecurity-dev/ocsf-lake/ent/runtime.go
 
 const (
 	Version = "v0.14.6"                                         // Version of ent codegen.

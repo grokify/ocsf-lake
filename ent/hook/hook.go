@@ -6,7 +6,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/grokify/ocsf-lake/ent"
+	"github.com/opensecurity-dev/ocsf-lake/ent"
 )
 
 // The EventFunc type is an adapter to allow the use of ordinary

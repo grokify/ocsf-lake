@@ -7,8 +7,8 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/grokify/ocsf-lake/pkg/lake"
-	"github.com/grokify/ocsf-lake/pkg/storage"
+	"github.com/opensecurity-dev/ocsf-lake/pkg/lake"
+	"github.com/opensecurity-dev/ocsf-lake/pkg/storage"
 	"github.com/opensecurity-dev/ocsf-schema-go/ocsf/events"
 	"github.com/opensecurity-dev/ocsf-schema-go/ocsf/objects"
 	"github.com/opensecurity-dev/ocsf-schema-go/validate"

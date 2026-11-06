@@ -11,8 +11,8 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/grokify/ocsf-lake/ent/event"
-	"github.com/grokify/ocsf-lake/ent/predicate"
+	"github.com/opensecurity-dev/ocsf-lake/ent/event"
+	"github.com/opensecurity-dev/ocsf-lake/ent/predicate"
 )
 
 // EventUpdate is the builder for updating Event entities.

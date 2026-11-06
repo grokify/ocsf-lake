@@ -24,8 +24,8 @@ import (
 	"time"
 
 	"github.com/google/uuid"
-	"github.com/grokify/ocsf-lake/pkg/ocsf"
-	"github.com/grokify/ocsf-lake/pkg/storage"
+	"github.com/opensecurity-dev/ocsf-lake/pkg/ocsf"
+	"github.com/opensecurity-dev/ocsf-lake/pkg/storage"
 	ri "github.com/opensecurity-dev/ocsf-schema-go/recordintegrity"
 )
 
