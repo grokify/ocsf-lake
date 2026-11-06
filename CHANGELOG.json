@@ -10,6 +10,44 @@
   ],
   "releases": [
     {
+      "version": "v0.3.0",
+      "date": "2026-11-06",
+      "highlights": [
+        {
+          "description": "Module moved to `github.com/opensecurity-dev/ocsf-lake`; update imports from `github.com/grokify/ocsf-lake`",
+          "commit": "ca52044"
+        }
+      ],
+      "breaking": [
+        {
+          "description": "Module path is now `github.com/opensecurity-dev/ocsf-lake`; versions up to v0.2.0 remain available at the old path",
+          "commit": "ca52044"
+        }
+      ],
+      "changed": [
+        {
+          "description": "Docs site moved to `opensecurity-dev.github.io/ocsf-lake`",
+          "commit": "ca52044"
+        }
+      ],
+      "dependencies": [
+        {
+          "description": "`github.com/opensecurity-dev/ocsf-schema-go` v0.3.0 replaces `github.com/grokify/ocsf-schema-go` v0.2.0, which it is otherwise identical to",
+          "commit": "3ca0932"
+        }
+      ],
+      "build": [
+        {
+          "description": "Docs site is built with `mkdocs build --strict` and deployed by the GitHub Pages workflow",
+          "commit": "19167c5"
+        },
+        {
+          "description": "`actions/checkout` v7 and `actions/setup-python` v7",
+          "commit": "397c317"
+        }
+      ]
+    },
+    {
       "version": "v0.2.0",
       "date": "2026-10-13",
       "commit": "2c23bb9",
